@@ -1,8 +1,7 @@
-const path = require('path');
-const fs = require('fs');
 const User = require('../models/User');
 const emailService = require('../utils/emailService');
 const { logAdminAction } = require('../models/AdminAuditLog');
+const cloudinary = require('../config/cloudinary');
 
 // @desc Get user profile
 exports.getProfile = async (req, res, next) => {
@@ -58,7 +57,18 @@ exports.updateProfile = async (req, res, next) => {
 exports.uploadAvatar = async (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
-    const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+
+    const avatarUrl = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { public_id: `wandr/avatars/user-${req.user._id}`, overwrite: true, resource_type: 'image' },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result.secure_url);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
+
     const user = await User.findByIdAndUpdate(req.user._id, { avatar: avatarUrl }, { new: true });
     try { await emailService.sendAvatarChangedEmail(user); } catch (e) {}
     res.json({ success: true, avatar: avatarUrl, user: user.toPublicJSON() });

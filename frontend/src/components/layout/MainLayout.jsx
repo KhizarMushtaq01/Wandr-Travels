@@ -125,7 +125,7 @@ export default function MainLayout() {
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Topbar */}
-        <header className="h-14 bg-w-navy/80 backdrop-blur-xl border-b border-w-border flex items-center px-4 gap-3 flex-shrink-0">
+        <header className="h-14 bg-w-navy/80 backdrop-blur-xl border-b border-w-border flex items-center px-4 gap-3 flex-shrink-0 z-30 relative">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden p-2 text-w-muted hover:text-white hover:bg-white/5 rounded-xl transition-colors">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
