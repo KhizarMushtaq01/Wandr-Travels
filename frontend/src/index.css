@@ -88,6 +88,11 @@ body {
   .stat-card { @apply card-hover; }
   .btn-secondary { @apply btn bg-w-blue/40 border border-w-border text-w-text px-6 py-3 text-sm hover:bg-w-blue/60 hover:border-w-accent/30; }
   .input-field { @apply input; }
+
+  /* ── Admin data tables (AdminUsersPage/AdminTripsPage/AdminBookingsPage rely on these) ─── */
+  .table-header { @apply text-xs font-medium text-wandr-muted uppercase tracking-wider px-4 py-3; }
+  .table-row { @apply border-b border-wandr-border/50 hover:bg-white/[0.02] transition-colors; }
+  .table-cell { @apply px-4 py-3; }
 }
 
 @layer utilities {
