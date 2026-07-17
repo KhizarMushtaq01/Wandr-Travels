@@ -328,7 +328,7 @@ export function TripDetailPage() {
       {/* Invite Modal */}
       {showInvite && (
         <div className="modal-overlay" onClick={() => setShowInvite(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-4">Invite Travel Companion</h3>
             <form onSubmit={handleInvite} className="space-y-4">
               <div>

@@ -176,7 +176,7 @@ export default function ItineraryPage() {
       {/* Add Destination Modal */}
       {showAddDest && (
         <div className="modal-overlay" onClick={() => setShowAddDest(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">Add Destination</h3>
             <form onSubmit={addDestination} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -201,7 +201,7 @@ export default function ItineraryPage() {
       {/* Add Activity Modal */}
       {showAddActivity && (
         <div className="modal-overlay" onClick={() => setShowAddActivity(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">Add Activity — {activeDest?.name}</h3>
             <form onSubmit={addActivity} className="space-y-4">
               <div><label className="label">Activity Name *</label><input className="input-field" placeholder="Visit Temple" value={newActivity.name} onChange={e => setNewActivity({ ...newActivity, name: e.target.value })} required /></div>

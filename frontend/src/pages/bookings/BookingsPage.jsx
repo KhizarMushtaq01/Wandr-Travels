@@ -97,7 +97,7 @@ export function BookingsPage() {
 
       {showAdd && (
         <div className="modal-overlay" onClick={() => setShowAdd(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">Add New Booking</h3>
             <form onSubmit={handleAdd} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
