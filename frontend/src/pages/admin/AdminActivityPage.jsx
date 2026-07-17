@@ -11,6 +11,7 @@ const ACTION_LABELS = {
   unfeature_trip: 'Unfeatured trip',
   publish_trip: 'Published trip',
   unpublish_trip: 'Unpublished trip',
+  delete_trip: 'Deleted trip',
   delete_journal: 'Deleted journal entry',
   send_broadcast: 'Sent broadcast email',
 };

@@ -178,3 +178,14 @@ exports.adminUpdateTrip = async (req, res, next) => {
     res.json({ success: true, trip });
   } catch (err) { next(err); }
 };
+
+// @desc Delete a trip, no owner check (admin)
+exports.adminDeleteTrip = async (req, res, next) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+    if (!trip) return res.status(404).json({ success: false, message: 'Trip not found' });
+    await trip.deleteOne();
+    logAdminAction(req.user._id, 'delete_trip', 'Trip', req.params.id, trip.name);
+    res.json({ success: true, message: 'Trip deleted' });
+  } catch (err) { next(err); }
+};

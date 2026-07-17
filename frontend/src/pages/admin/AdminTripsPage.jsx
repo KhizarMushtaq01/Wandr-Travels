@@ -32,7 +32,7 @@ export default function AdminTripsPage() {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this trip?')) return;
-    await api.delete('/trips/' + id);
+    await api.delete('/admin/trips/' + id);
     setTrips(t => t.filter(x => x._id !== id));
     toast.success('Trip deleted');
   };
