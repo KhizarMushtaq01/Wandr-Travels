@@ -30,7 +30,7 @@ export default function AdminActivityPage() {
             </div>
             <div className="space-y-1.5 pl-11">
               {(user.loginHistory || []).slice(0, 3).map((log, i) => (
-                <div key={i} className="text-xs text-wandr-muted flex gap-4">
+                <div key={i} className="text-xs text-wandr-muted flex gap-4 flex-wrap">
                   <span className="text-wandr-text">{new Date(log.timestamp).toLocaleString()}</span>
                   <span>{log.ip}</span>
                   <span className="truncate hidden md:block">{log.device?.substring(0, 50)}</span>
