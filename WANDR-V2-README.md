@@ -28,7 +28,7 @@ A complete, production-ready full-stack travel platform with Vite + React fronte
 | Backend     | Node.js 20 + Express 4                       |
 | Database    | MongoDB + Mongoose                           |
 | Auth        | JWT                                          |
-| Email       | Nodemailer (Gmail SMTP)                      |
+| Email       | Resend (transactional email API)             |
 | File upload | Multer                                       |
 | Security    | Helmet, CORS, Rate Limiting, bcrypt-12       |
 
