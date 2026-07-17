@@ -4,22 +4,24 @@ import { motion, AnimatePresence } from 'framer-motion'
 import useAuthStore from '../../context/authStore'
 import NotificationBell from '../common/NotificationBell'
 import GlobalSearch from '../common/GlobalSearch'
+import { NAV_ICONS } from '../../utils/icons'
+import { FaStar, FaGem } from 'react-icons/fa6'
 
 const NAV = [
-  { to:'/dashboard',   icon:'🏠', label:'Dashboard'   },
-  { to:'/trips',       icon:'🗺️', label:'My Trips'    },
-  { to:'/bookings',    icon:'📅', label:'Bookings'    },
-  { to:'/budget',      icon:'💰', label:'Budget'      },
-  { to:'/packing',     icon:'🎒', label:'Packing'     },
-  { to:'/discover',    icon:'✨', label:'Discover'    },
-  { to:'/wishlist',    icon:'❤️', label:'Wishlist'    },
-  { to:'/journal',     icon:'📔', label:'Journal'     },
-  { to:'/social',      icon:'👥', label:'Social Feed' },
+  { to:'/dashboard',   icon:NAV_ICONS.dashboard,     label:'Dashboard'   },
+  { to:'/trips',       icon:NAV_ICONS.trips,         label:'My Trips'    },
+  { to:'/bookings',    icon:NAV_ICONS.bookings,      label:'Bookings'    },
+  { to:'/budget',      icon:NAV_ICONS.budget,        label:'Budget'      },
+  { to:'/packing',     icon:NAV_ICONS.packing,       label:'Packing'     },
+  { to:'/discover',    icon:NAV_ICONS.discover,      label:'Discover'    },
+  { to:'/wishlist',    icon:NAV_ICONS.wishlist,      label:'Wishlist'    },
+  { to:'/journal',     icon:NAV_ICONS.journal,       label:'Journal'     },
+  { to:'/social',      icon:NAV_ICONS.social,        label:'Social Feed' },
 ]
 const BOTTOM = [
-  { to:'/profile',       icon:'👤', label:'Profile'       },
-  { to:'/settings',      icon:'⚙️', label:'Settings'      },
-  { to:'/notifications', icon:'🔔', label:'Notifications' },
+  { to:'/profile',       icon:NAV_ICONS.profile,       label:'Profile'       },
+  { to:'/settings',      icon:NAV_ICONS.settings,      label:'Settings'      },
+  { to:'/notifications', icon:NAV_ICONS.notifications, label:'Notifications' },
 ]
 
 function Sidebar({ onClose }) {
@@ -53,7 +55,7 @@ function Sidebar({ onClose }) {
           )}
           <div className="flex-1 min-w-0">
             <div className="text-sm font-medium text-white truncate">{user?.firstName} {user?.lastName}</div>
-            <div className="text-xs text-w-muted truncate capitalize">{user?.subscriptionPlan === 'pro' ? '⭐ Pro' : user?.subscriptionPlan === 'premium' ? '💎 Premium' : 'Explorer'}</div>
+            <div className="text-xs text-w-muted truncate capitalize flex items-center gap-1">{user?.subscriptionPlan === 'pro' ? <><FaStar className="w-3 h-3" /> Pro</> : user?.subscriptionPlan === 'premium' ? <><FaGem className="w-3 h-3" /> Premium</> : 'Explorer'}</div>
           </div>
         </NavLink>
       </div>
@@ -64,7 +66,7 @@ function Sidebar({ onClose }) {
         {NAV.map(({ to, icon, label }) => (
           <NavLink key={to} to={to} onClick={onClose}
             className={({ isActive }) => isActive ? 'nav-item-active' : 'nav-item'}>
-            <span className="text-base w-5 flex-shrink-0">{icon}</span>
+            <span className="w-5 flex-shrink-0">{icon}</span>
             <span>{label}</span>
           </NavLink>
         ))}
@@ -72,13 +74,13 @@ function Sidebar({ onClose }) {
         {BOTTOM.map(({ to, icon, label }) => (
           <NavLink key={to} to={to} onClick={onClose}
             className={({ isActive }) => isActive ? 'nav-item-active' : 'nav-item'}>
-            <span className="text-base w-5 flex-shrink-0">{icon}</span>
+            <span className="w-5 flex-shrink-0">{icon}</span>
             <span>{label}</span>
           </NavLink>
         ))}
         {isAdmin() && (
           <NavLink to="/admin" onClick={onClose} className="nav-item text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 mt-1">
-            <span className="text-base w-5">🛡️</span>
+            <span className="w-5">{NAV_ICONS.admin}</span>
             <span>Admin Panel</span>
           </NavLink>
         )}
@@ -87,7 +89,7 @@ function Sidebar({ onClose }) {
       {/* Sign out */}
       <div className="px-3 py-3 border-t border-w-border">
         <button onClick={handleLogout} className="nav-item w-full text-red-400 hover:text-red-300 hover:bg-red-500/10">
-          <span className="text-base w-5">🚪</span>
+          <span className="w-5">{NAV_ICONS.signOut}</span>
           <span>Sign Out</span>
         </button>
       </div>
