@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { FaMap, FaCalendarDays, FaBookOpen, FaGlobe } from 'react-icons/fa6';
 import api from '../../utils/api';
 
 const emptyResults = { trips: [], bookings: [], journal: [], destinations: [] };
@@ -12,7 +13,7 @@ function ResultGroups({ results, onNavigate }) {
         <div className="px-4 py-2">
           <div className="text-[10px] uppercase tracking-widest text-wandr-muted mb-1">Trips</div>
           {results.trips.map(t => (
-            <button key={t._id} onClick={() => onNavigate(`/trips/${t._id}`)} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate">🗺️ {t.name}</button>
+            <button key={t._id} onClick={() => onNavigate(`/trips/${t._id}`)} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate flex items-center gap-2"><FaMap className="w-3.5 h-3.5 flex-shrink-0" /> {t.name}</button>
           ))}
         </div>
       )}
@@ -20,7 +21,7 @@ function ResultGroups({ results, onNavigate }) {
         <div className="px-4 py-2">
           <div className="text-[10px] uppercase tracking-widest text-wandr-muted mb-1">Bookings</div>
           {results.bookings.map(b => (
-            <button key={b._id} onClick={() => onNavigate(`/bookings/${b._id}`)} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate">📅 {b.name}</button>
+            <button key={b._id} onClick={() => onNavigate(`/bookings/${b._id}`)} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate flex items-center gap-2"><FaCalendarDays className="w-3.5 h-3.5 flex-shrink-0" /> {b.name}</button>
           ))}
         </div>
       )}
@@ -28,7 +29,7 @@ function ResultGroups({ results, onNavigate }) {
         <div className="px-4 py-2">
           <div className="text-[10px] uppercase tracking-widest text-wandr-muted mb-1">Journal</div>
           {results.journal.map(j => (
-            <button key={j._id} onClick={() => onNavigate(`/journal/${j._id}`)} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate">📔 {j.title}</button>
+            <button key={j._id} onClick={() => onNavigate(`/journal/${j._id}`)} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate flex items-center gap-2"><FaBookOpen className="w-3.5 h-3.5 flex-shrink-0" /> {j.title}</button>
           ))}
         </div>
       )}
@@ -36,7 +37,7 @@ function ResultGroups({ results, onNavigate }) {
         <div className="px-4 py-2">
           <div className="text-[10px] uppercase tracking-widest text-wandr-muted mb-1">Destinations</div>
           {results.destinations.map(d => (
-            <button key={d.name} onClick={() => onNavigate('/discover')} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate">🌍 {d.name}{d.country ? `, ${d.country}` : ''}</button>
+            <button key={d.name} onClick={() => onNavigate('/discover')} className="w-full text-left px-2 py-2 rounded-lg hover:bg-white/5 text-sm text-white truncate flex items-center gap-2"><FaGlobe className="w-3.5 h-3.5 flex-shrink-0" /> {d.name}{d.country ? `, ${d.country}` : ''}</button>
           ))}
         </div>
       )}
