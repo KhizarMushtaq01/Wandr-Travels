@@ -3,6 +3,7 @@ const Trip = require('../models/Trip');
 const Booking = require('../models/Booking');
 const { Expense, Journal, Notification } = require('../models/Extras');
 const { AdminAuditLog, logAdminAction } = require('../models/AdminAuditLog');
+const ContactMessage = require('../models/ContactMessage');
 
 exports.getDashboardStats = async (req, res, next) => {
   try {
@@ -153,5 +154,40 @@ exports.adminDeleteJournal = async (req, res, next) => {
     await entry.deleteOne();
     logAdminAction(req.user._id, 'delete_journal', 'Journal', req.params.id, entry.title);
     res.json({ success: true, message: 'Journal entry removed' });
+  } catch (err) { next(err); }
+};
+
+// @desc List contact form submissions (admin)
+exports.getAllContactMessages = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const query = {};
+    if (req.query.status) query.status = req.query.status;
+
+    const [messages, total] = await Promise.all([
+      ContactMessage.find(query).sort('-createdAt').skip(skip).limit(limit),
+      ContactMessage.countDocuments(query)
+    ]);
+    res.json({ success: true, messages, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Update a contact message's status (admin)
+exports.updateContactMessageStatus = async (req, res, next) => {
+  try {
+    const message = await ContactMessage.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true, runValidators: true });
+    if (!message) return res.status(404).json({ success: false, message: 'Message not found' });
+    res.json({ success: true, message });
+  } catch (err) { next(err); }
+};
+
+// @desc Delete a contact message (admin)
+exports.deleteContactMessage = async (req, res, next) => {
+  try {
+    const message = await ContactMessage.findByIdAndDelete(req.params.id);
+    if (!message) return res.status(404).json({ success: false, message: 'Message not found' });
+    res.json({ success: true, message: 'Message deleted' });
   } catch (err) { next(err); }
 };
