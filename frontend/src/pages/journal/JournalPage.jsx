@@ -4,8 +4,8 @@ import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { PlusIcon, TrashIcon, BookOpenIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
-
-const moods = { amazing: '🤩', happy: '😊', neutral: '😐', tired: '😴', challenging: '😤' };
+import { JOURNAL_MOOD_ICONS } from '../../utils/icons';
+import { FaLocationDot } from 'react-icons/fa6';
 
 export default function JournalPage() {
   const [entries, setEntries] = useState([]);
@@ -48,7 +48,7 @@ export default function JournalPage() {
             <div key={entry._id} className="card-hover group">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">{moods[entry.mood]}</span>
+                  <span>{JOURNAL_MOOD_ICONS[entry.mood]}</span>
                   {entry.isPublic && <span className="badge-blue text-xs">Public</span>}
                 </div>
                 <div className="flex gap-1">
@@ -59,7 +59,7 @@ export default function JournalPage() {
               <h3 className="font-display text-lg text-white font-semibold mb-2 group-hover:text-wandr-accent transition-colors">{entry.title}</h3>
               <p className="text-sm text-wandr-muted line-clamp-3 mb-4">{entry.content}</p>
               <div className="flex items-center justify-between text-xs text-wandr-muted">
-                <div>{entry.location && <span>📍 {entry.location} · </span>}{format(new Date(entry.date), 'MMM d, yyyy')}</div>
+                <div className="inline-flex items-center gap-1">{entry.location && <><FaLocationDot className="w-3 h-3" /> {entry.location} · </>}{format(new Date(entry.date), 'MMM d, yyyy')}</div>
                 <span><HeartIcon className="w-3.5 h-3.5 inline mr-1" />{entry.likes?.length || 0}</span>
               </div>
             </div>
@@ -80,8 +80,8 @@ export default function JournalPage() {
               <div>
                 <label className="label">Mood</label>
                 <div className="flex gap-2">
-                  {Object.entries(moods).map(([mood, emoji]) => (
-                    <button key={mood} type="button" onClick={() => setForm({ ...form, mood })} className={`flex-1 py-2 rounded-xl border transition-all text-lg ${form.mood === mood ? 'bg-wandr-accent/15 border-wandr-accent/30' : 'border-wandr-border hover:border-wandr-accent/30'}`}>{emoji}</button>
+                  {Object.entries(JOURNAL_MOOD_ICONS).map(([mood, icon]) => (
+                    <button key={mood} type="button" onClick={() => setForm({ ...form, mood })} className={`flex-1 py-2.5 rounded-xl border transition-all flex items-center justify-center ${form.mood === mood ? 'bg-wandr-accent/15 border-wandr-accent/30 text-wandr-accent' : 'border-wandr-border text-wandr-muted hover:border-wandr-accent/30'}`}>{icon}</button>
                   ))}
                 </div>
               </div>
