@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { SOCIAL_ICONS } from '../../utils/icons'
 
 function PublicNav() {
   const [scrolled, setScrolled] = useState(false)
@@ -47,6 +48,16 @@ function PublicFooter() {
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-w-accent to-w-gold flex items-center justify-center text-w-dark font-bold text-xs">W</div>
             <span className="text-w-muted text-sm">© {new Date().getFullYear()} Wandr Travel</span>
+          </div>
+          <div className="flex gap-3">
+            {[
+              { key: 'x', icon: SOCIAL_ICONS.x },
+              { key: 'linkedin', icon: SOCIAL_ICONS.linkedin },
+              { key: 'instagram', icon: SOCIAL_ICONS.instagram },
+              { key: 'youtube', icon: SOCIAL_ICONS.youtube },
+            ].map(({ key, icon }) => (
+              <a key={key} href="#" className="w-8 h-8 rounded-lg bg-w-border/50 border border-w-border flex items-center justify-center text-w-muted hover:text-w-accent hover:border-w-accent/40 transition-all">{icon}</a>
+            ))}
           </div>
           <p className="text-xs text-w-muted/50">Built for adventurers worldwide</p>
         </div>
