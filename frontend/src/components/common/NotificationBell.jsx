@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BellIcon, CheckIcon } from '@heroicons/react/24/outline';
 import api from '../../utils/api';
 import { formatDistanceToNow } from 'date-fns';
+import { NOTIFICATION_TYPE_ICONS } from '../../utils/icons';
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
@@ -38,10 +39,7 @@ export default function NotificationBell() {
     } catch (e) {}
   };
 
-  const typeIcon = (type) => {
-    const map = { trip_invite: '✈️', booking_confirmed: '✅', booking_cancelled: '❌', follow: '👥', like: '❤️', comment: '💬', trip_reminder: '⏰', system: '🔔', achievement: '🏆' };
-    return map[type] || '🔔';
-  };
+  const typeIcon = (type) => NOTIFICATION_TYPE_ICONS[type] || NOTIFICATION_TYPE_ICONS.system;
 
   return (
     <div className="relative" ref={ref}>
@@ -79,7 +77,7 @@ export default function NotificationBell() {
               notifications.slice(0, 10).map(n => (
                 <div key={n._id} className={`px-4 py-3 border-b border-wandr-border/50 hover:bg-white/3 transition-colors ${!n.isRead ? 'bg-wandr-accent/5' : ''}`}>
                   <div className="flex gap-3">
-                    <span className="text-lg flex-shrink-0">{typeIcon(n.type)}</span>
+                    <span className="flex-shrink-0">{typeIcon(n.type)}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-white font-medium line-clamp-1">{n.title}</p>
                       <p className="text-xs text-wandr-muted line-clamp-2 mt-0.5">{n.message}</p>

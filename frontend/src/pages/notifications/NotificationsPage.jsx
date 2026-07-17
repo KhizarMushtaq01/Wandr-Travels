@@ -3,8 +3,7 @@ import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { CheckIcon, TrashIcon, BellIcon } from '@heroicons/react/24/outline';
 import { formatDistanceToNow } from 'date-fns';
-
-const typeIcons = { trip_invite: '✈️', booking_confirmed: '✅', booking_cancelled: '❌', follow: '👥', like: '❤️', comment: '💬', trip_reminder: '⏰', system: '🔔', achievement: '🏆' };
+import { NOTIFICATION_TYPE_ICONS } from '../../utils/icons';
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
@@ -58,7 +57,7 @@ export default function NotificationsPage() {
           {notifications.map(n => (
             <div key={n._id} className={`flex gap-4 p-4 rounded-2xl border transition-all ${!n.isRead ? 'border-wandr-accent/20 bg-wandr-accent/5' : 'border-wandr-border bg-wandr-card hover:border-wandr-border'}`}
               onClick={() => !n.isRead && markRead(n._id)}>
-              <span className="text-2xl flex-shrink-0 mt-0.5">{typeIcons[n.type] || '🔔'}</span>
+              <span className="flex-shrink-0 mt-0.5">{NOTIFICATION_TYPE_ICONS[n.type] || NOTIFICATION_TYPE_ICONS.system}</span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
                   <div>
