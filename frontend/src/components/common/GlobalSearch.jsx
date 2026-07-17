@@ -52,6 +52,7 @@ export default function GlobalSearch() {
   const [loading, setLoading] = useState(false);
   const ref = useRef();
   const navigate = useNavigate();
+  const latestQuery = useRef('');
 
   useEffect(() => {
     const handleClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
@@ -60,13 +61,19 @@ export default function GlobalSearch() {
   }, []);
 
   useEffect(() => {
+    latestQuery.current = query;
     if (!query.trim()) { setResults(emptyResults); setOpen(false); return; }
     setLoading(true);
     const timeout = setTimeout(() => {
-      api.get('/search?q=' + encodeURIComponent(query))
-        .then(r => { setResults(r.data); setOpen(true); })
+      const q = query;
+      api.get('/search?q=' + encodeURIComponent(q))
+        .then(r => {
+          if (latestQuery.current !== q) return;
+          setResults(r.data);
+          setOpen(true);
+        })
         .catch(() => {})
-        .finally(() => setLoading(false));
+        .finally(() => { if (latestQuery.current === q) setLoading(false); });
     }, 300);
     return () => clearTimeout(timeout);
   }, [query]);
@@ -87,7 +94,7 @@ export default function GlobalSearch() {
           className="w-full bg-white/5 border border-wandr-border rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder:text-wandr-muted focus:outline-none focus:border-wandr-accent/40 transition-colors"
         />
         {open && (
-          <div className="absolute left-0 right-0 top-12 w-96 max-w-[calc(100vw-2rem)] bg-wandr-navy border border-wandr-border rounded-2xl shadow-2xl z-50 max-h-96 overflow-y-auto scrollbar-hide animate-slide-down">
+          <div className="absolute right-0 top-12 w-96 max-w-[calc(100vw-2rem)] bg-wandr-navy border border-wandr-border rounded-2xl shadow-2xl z-50 max-h-96 overflow-y-auto scrollbar-hide animate-slide-down">
             {loading ? (
               <div className="py-8 text-center text-wandr-muted text-sm">Searching...</div>
             ) : !hasResults ? (
