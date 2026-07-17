@@ -1,16 +1,6 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-};
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const emailStyles = `
   <style>
@@ -49,16 +39,17 @@ const emailStyles = `
 `;
 
 const sendEmail = async ({ to, subject, html }) => {
-  const transporter = createTransporter();
-  const info = await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'Wandr Travel <noreply@wandr.travel>',
+  const { data, error } = await resend.emails.send({
+    from: process.env.EMAIL_FROM || 'Wandr Travel <noreply@albreeza.com>',
     to,
     subject,
     html,
   });
-  console.log(`📧 Email sent: ${info.messageId} → ${to}`);
-  return info;
+  if (error) throw new Error(error.message || 'Resend send failed');
+  console.log(`📧 Email sent: ${data.id} → ${to}`);
+  return data;
 };
+exports.sendEmail = sendEmail;
 
 const wrapEmail = (content) => `
 <!DOCTYPE html>
