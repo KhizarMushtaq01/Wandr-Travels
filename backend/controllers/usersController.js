@@ -157,3 +157,19 @@ exports.changeUserRole = async (req, res, next) => {
     res.json({ success: true, user });
   } catch (err) { next(err); }
 };
+
+// @desc Toggle a destination in the current user's wishlist
+exports.toggleWishlist = async (req, res, next) => {
+  try {
+    const destination = (req.body.destination || '').trim();
+    if (!destination) {
+      return res.status(400).json({ success: false, message: 'Destination is required' });
+    }
+    const isSaved = req.user.savedDestinations.includes(destination);
+    const update = isSaved
+      ? { $pull: { savedDestinations: destination } }
+      : { $push: { savedDestinations: destination } };
+    const user = await User.findByIdAndUpdate(req.user._id, update, { new: true });
+    res.json({ success: true, saved: !isSaved, savedDestinations: user.savedDestinations });
+  } catch (err) { next(err); }
+};

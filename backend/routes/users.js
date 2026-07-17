@@ -6,7 +6,7 @@ const fs = require('fs');
 const { protect, authorize } = require('../middleware/auth');
 const {
   getProfile, updateProfile, uploadAvatar, deleteAccount,
-  toggleFollow, searchUsers, getAllUsers, toggleUserStatus, changeUserRole
+  toggleFollow, searchUsers, getAllUsers, toggleUserStatus, changeUserRole, toggleWishlist
 } = require('../controllers/usersController');
 
 // Multer config for avatar uploads
@@ -39,6 +39,7 @@ router.get('/me', protect, getProfile);
 router.put('/me', protect, updateProfile);
 router.post('/me/avatar', protect, upload.single('avatar'), uploadAvatar);
 router.delete('/me', protect, deleteAccount);
+router.post('/me/wishlist', protect, toggleWishlist);
 router.post('/:id/follow', protect, toggleFollow);
 
 // Admin routes
