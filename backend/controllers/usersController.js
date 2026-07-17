@@ -10,7 +10,10 @@ exports.getProfile = async (req, res, next) => {
       .populate('followers', 'firstName lastName avatar')
       .populate('following', 'firstName lastName avatar');
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    res.json({ success: true, user: user.toPublicJSON() });
+    const isOwnProfile = !req.params.id || req.params.id === req.user._id.toString();
+    const publicUser = user.toPublicJSON();
+    if (!isOwnProfile) delete publicUser.savedDestinations;
+    res.json({ success: true, user: publicUser });
   } catch (err) { next(err); }
 };
 
