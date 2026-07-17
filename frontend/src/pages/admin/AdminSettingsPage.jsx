@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { ServerIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 export default function AdminSettingsPage() {
   const [health, setHealth] = useState(null);
@@ -72,7 +73,7 @@ export default function AdminSettingsPage() {
             <textarea className="input-field resize-none min-h-[120px]" placeholder="<p>Hello explorers...</p>" value={broadcast.message} onChange={e => setBroadcast({ ...broadcast, message: e.target.value })} required />
           </div>
           <div className="p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/20">
-            <p className="text-xs text-yellow-400">⚠️ This will send a real email to all matching users. Use with caution.</p>
+            <p className="text-xs text-yellow-400 flex items-center gap-1.5"><FaTriangleExclamation className="w-3.5 h-3.5 flex-shrink-0" /> This will send a real email to all matching users. Use with caution.</p>
           </div>
           <button type="submit" disabled={sending} className="btn-primary w-full py-3">
             {sending ? 'Sending...' : 'Send Broadcast Email'}

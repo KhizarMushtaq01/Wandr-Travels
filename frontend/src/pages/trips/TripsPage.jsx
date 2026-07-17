@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PlusIcon, MapIcon, TrashIcon, PencilIcon, UserPlusIcon, GlobeAltIcon, HeartIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+import { FaMap, FaRocket, FaCalendarDays, FaStopwatch, FaSackDollar, FaUsers, FaHotel, FaEnvelope } from 'react-icons/fa6';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
@@ -58,7 +59,7 @@ export function TripsPage() {
                 {trip.coverImage ? (
                   <img src={trip.coverImage} alt={trip.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-wandr-mid to-wandr-blue flex items-center justify-center text-5xl">🗺️</div>
+                  <div className="w-full h-full bg-gradient-to-br from-wandr-mid to-wandr-blue flex items-center justify-center"><FaMap className="w-10 h-10 text-wandr-accent" /></div>
                 )}
                 <div className="absolute top-3 right-3">
                   <span className={`${statusColors[trip.status] || 'badge-blue'} text-[11px]`}>{trip.status}</span>
@@ -98,7 +99,7 @@ export function CreateTripPage() {
     try {
       const payload = { ...form, tags: form.tags ? form.tags.split(',').map(t => t.trim()) : [] };
       const res = await api.post('/trips', payload);
-      toast.success('Trip created! 🗺️');
+      toast.success(<>Trip created! <FaMap className="inline w-4 h-4 ml-1" /></>);
       navigate(`/trips/${res.data.trip._id}`);
     } catch (e) { setLoading(false); }
   };
@@ -174,7 +175,7 @@ export function CreateTripPage() {
         <div className="flex gap-4 pt-2">
           <button type="button" onClick={() => navigate(-1)} className="btn-secondary flex-1">Cancel</button>
           <button type="submit" disabled={loading} className="btn-primary flex-1">
-            {loading ? 'Creating...' : 'Create Trip 🚀'}
+            {loading ? 'Creating...' : <>Create Trip <FaRocket className="inline w-4 h-4 ml-1" /></>}
           </button>
         </div>
       </form>
@@ -225,7 +226,7 @@ export function TripDetailPage() {
       {/* Header */}
       <div className="relative rounded-2xl overflow-hidden">
         <div className="h-56 bg-gradient-to-br from-wandr-mid to-wandr-blue flex items-center justify-center">
-          {trip.coverImage ? <img src={trip.coverImage} alt={trip.name} className="w-full h-full object-cover" /> : <span className="text-7xl">🗺️</span>}
+          {trip.coverImage ? <img src={trip.coverImage} alt={trip.name} className="w-full h-full object-cover" /> : <FaMap className="w-16 h-16 text-wandr-accent" />}
           <div className="absolute inset-0 bg-gradient-to-t from-wandr-dark/80 to-transparent" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -255,13 +256,13 @@ export function TripDetailPage() {
       {/* Info Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Start Date', value: trip.startDate ? format(new Date(trip.startDate), 'MMM d, yyyy') : 'TBD', icon: '📅' },
-          { label: 'Duration', value: trip.duration ? `${trip.duration} days` : 'TBD', icon: '⏱️' },
-          { label: 'Budget', value: trip.totalBudget ? `${trip.currency} ${trip.totalBudget}` : 'TBD', icon: '💰' },
-          { label: 'Travelers', value: (trip.collaborators?.length || 0) + 1, icon: '👥' },
+          { label: 'Start Date', value: trip.startDate ? format(new Date(trip.startDate), 'MMM d, yyyy') : 'TBD', icon: <FaCalendarDays className="w-6 h-6" /> },
+          { label: 'Duration', value: trip.duration ? `${trip.duration} days` : 'TBD', icon: <FaStopwatch className="w-6 h-6" /> },
+          { label: 'Budget', value: trip.totalBudget ? `${trip.currency} ${trip.totalBudget}` : 'TBD', icon: <FaSackDollar className="w-6 h-6" /> },
+          { label: 'Travelers', value: (trip.collaborators?.length || 0) + 1, icon: <FaUsers className="w-6 h-6" /> },
         ].map(({ label, value, icon }) => (
           <div key={label} className="stat-card text-center py-4">
-            <div className="text-2xl mb-1">{icon}</div>
+            <div className="text-wandr-accent mb-1 flex justify-center">{icon}</div>
             <div className="text-white font-semibold">{value}</div>
             <div className="text-wandr-muted text-xs mt-0.5">{label}</div>
           </div>
@@ -288,7 +289,7 @@ export function TripDetailPage() {
                     </div>
                   )}
                 </div>
-                {dest.accommodation && <div className="text-xs text-wandr-muted hidden sm:block">🏨 {dest.accommodation}</div>}
+                {dest.accommodation && <div className="text-xs text-wandr-muted hidden sm:flex sm:items-center sm:gap-1"><FaHotel className="w-3 h-3" /> {dest.accommodation}</div>}
               </div>
             ))}
           </div>
@@ -338,7 +339,7 @@ export function TripDetailPage() {
               <p className="text-xs text-wandr-muted">They'll receive an email invitation to join this trip as an editor.</p>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowInvite(false)} className="btn-secondary flex-1">Cancel</button>
-                <button type="submit" className="btn-primary flex-1">Send Invite ✉️</button>
+                <button type="submit" className="btn-primary flex-1 inline-flex items-center justify-center gap-2">Send Invite <FaEnvelope className="w-4 h-4" /></button>
               </div>
             </form>
           </div>

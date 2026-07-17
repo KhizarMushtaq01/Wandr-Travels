@@ -4,8 +4,8 @@ import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { HeartIcon, TrashIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
-
-const moods = { amazing: '🤩', happy: '😊', neutral: '😐', tired: '😴', challenging: '😤' };
+import { JOURNAL_MOOD_ICONS } from '../../utils/icons';
+import { FaLocationDot } from 'react-icons/fa6';
 
 export default function JournalEntryPage() {
   const { id } = useParams();
@@ -45,12 +45,12 @@ export default function JournalEntryPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-3xl">{moods[entry.mood] || '😊'}</span>
+              <span>{JOURNAL_MOOD_ICONS[entry.mood] || JOURNAL_MOOD_ICONS.happy}</span>
               {entry.isPublic && <span className="badge-blue text-xs">Public</span>}
             </div>
             <h1 className="font-display text-3xl text-white font-semibold">{entry.title}</h1>
             <div className="flex items-center gap-3 mt-2 text-sm text-wandr-muted">
-              {entry.location && <span>📍 {entry.location}</span>}
+              {entry.location && <span className="inline-flex items-center gap-1"><FaLocationDot className="w-3 h-3" /> {entry.location}</span>}
               <span>{format(new Date(entry.date), 'MMMM d, yyyy')}</span>
             </div>
           </div>

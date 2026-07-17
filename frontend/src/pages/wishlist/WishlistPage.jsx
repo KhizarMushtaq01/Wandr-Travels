@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+import { FaMap } from 'react-icons/fa6';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../context/authStore';
@@ -54,7 +55,7 @@ export default function WishlistPage() {
                     <img src={match.image} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                 ) : (
-                  <div className="h-24 -mx-6 -mt-6 mb-3 bg-gradient-to-br from-wandr-mid to-wandr-blue flex items-center justify-center text-3xl">🗺️</div>
+                  <div className="h-24 -mx-6 -mt-6 mb-3 bg-gradient-to-br from-wandr-mid to-wandr-blue flex items-center justify-center"><FaMap className="w-8 h-8 text-wandr-accent" /></div>
                 )}
                 <div className="text-white font-medium text-sm truncate">{name}</div>
                 {match?.country && <div className="text-wandr-muted text-xs truncate">{match.country}</div>}

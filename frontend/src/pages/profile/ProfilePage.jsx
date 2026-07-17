@@ -4,6 +4,7 @@ import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../context/authStore';
 import { CameraIcon, PencilIcon, UserPlusIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { FaCircleCheck, FaImage, FaLocationDot, FaMap } from 'react-icons/fa6';
 
 const travelStyles = ['Adventure', 'Cultural', 'Luxury', 'Budget', 'Solo', 'Family', 'Romantic', 'Beach', 'Mountain', 'City'];
 
@@ -38,7 +39,7 @@ export default function ProfilePage() {
       setProfile(res.data.user);
       setUser(res.data.user);
       setIsEditing(false);
-      toast.success('Profile updated! ✅');
+      toast.success(<>Profile updated! <FaCircleCheck className="inline w-4 h-4 ml-1" /></>);
     } catch (e) {}
   };
 
@@ -51,7 +52,7 @@ export default function ProfilePage() {
       const res = await api.post('/users/me/avatar', data, { headers: { 'Content-Type': 'multipart/form-data' } });
       setProfile(p => ({ ...p, avatar: res.data.avatar }));
       setUser({ ...currentUser, avatar: res.data.avatar });
-      toast.success('Avatar updated! 🖼️');
+      toast.success(<>Avatar updated! <FaImage className="inline w-4 h-4 ml-1" /></>);
     } catch (e) {}
   };
 
@@ -103,7 +104,7 @@ export default function ProfilePage() {
                 <div className="flex items-center gap-2 mt-1 flex-wrap">
                   <span className={`badge-${profile.role === 'admin' ? 'red' : 'gold'} text-xs capitalize`}>{profile.role}</span>
                   <span className="badge-blue text-xs capitalize">{profile.subscriptionPlan}</span>
-                  {profile.location && <span className="text-xs text-wandr-muted">📍 {profile.location}</span>}
+                  {profile.location && <span className="text-xs text-wandr-muted inline-flex items-center gap-1"><FaLocationDot className="w-3 h-3" /> {profile.location}</span>}
                 </div>
               </div>
               {isOwn ? (
@@ -178,7 +179,7 @@ export default function ProfilePage() {
           <div className="space-y-3">
             {trips.slice(0, 5).map(trip => (
               <div key={trip._id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-wandr-blue/20 transition-colors">
-                <div className="w-10 h-10 rounded-xl bg-wandr-blue flex items-center justify-center text-lg flex-shrink-0">🗺️</div>
+                <div className="w-10 h-10 rounded-xl bg-wandr-blue flex items-center justify-center flex-shrink-0"><FaMap className="w-4 h-4 text-wandr-accent" /></div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-white truncate">{trip.name}</div>
                   <div className="text-xs text-wandr-muted">{trip.destinations?.map(d => d.name).join(', ') || 'No destinations'}</div>

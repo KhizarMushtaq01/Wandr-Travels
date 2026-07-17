@@ -4,6 +4,8 @@ import { MapIcon, CalendarIcon, CurrencyDollarIcon, PlusIcon, ArrowRightIcon, Gl
 import useAuthStore from '../../context/authStore';
 import api from '../../utils/api';
 import { format, isAfter } from 'date-fns';
+import { BOOKING_TYPE_ICONS } from '../../utils/icons';
+import { FaMap, FaGlobe, FaHotel, FaSackDollar, FaBoxesPacking, FaCompass, FaBookOpen, FaUsers, FaGear } from 'react-icons/fa6';
 
 const StatCard = ({ icon: Icon, label, value, sub, color = 'text-wandr-accent', link }) => (
   <Link to={link || '#'} className="stat-card group block">
@@ -28,7 +30,7 @@ const TripCard = ({ trip }) => {
           <img src={trip.coverImage} alt={trip.name} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-2xl">
-            {trip.destinations?.[0]?.name?.[0] || '🗺️'}
+            {trip.destinations?.[0]?.name?.[0] || <FaMap className="w-6 h-6 text-wandr-muted" />}
           </div>
         )}
       </div>
@@ -100,8 +102,8 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl text-white font-semibold">
-            {greeting}, {user?.firstName}! 🌍
+          <h1 className="font-display text-3xl text-white font-semibold flex items-center gap-2">
+            {greeting}, {user?.firstName}! <FaGlobe className="w-6 h-6 text-wandr-accent" />
           </h1>
           <p className="text-wandr-muted mt-1">
             {activeTrips.length > 0 ? `You have ${activeTrips.length} active trip${activeTrips.length > 1 ? 's' : ''}` : nextTrip ? `Next trip: ${nextTrip.name}` : 'Ready to plan your next adventure?'}
@@ -182,7 +184,7 @@ export default function DashboardPage() {
               {upcomingBookings.map(booking => (
                 <Link key={booking._id} to={`/bookings/${booking._id}`} className="flex items-center gap-4 p-3 rounded-xl hover:bg-wandr-blue/30 transition-colors group">
                   <div className="w-10 h-10 rounded-xl bg-wandr-blue flex items-center justify-center text-lg flex-shrink-0">
-                    {{ flight: '✈️', hotel: '🏨', activity: '🎯', car: '🚗', train: '🚂', tour: '🗺️' }[booking.type] || '📌'}
+                    {BOOKING_TYPE_ICONS[booking.type] || BOOKING_TYPE_ICONS.other}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-white truncate group-hover:text-wandr-accent transition-colors">{booking.name}</div>
@@ -206,17 +208,17 @@ export default function DashboardPage() {
         <h2 className="font-display text-lg text-white font-semibold mb-5">Quick Actions</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { icon: '✈️', label: 'New Trip', href: '/trips/new' },
-            { icon: '🏨', label: 'Add Booking', href: '/bookings' },
-            { icon: '💰', label: 'Log Expense', href: '/budget' },
-            { icon: '🎒', label: 'Packing List', href: '/packing' },
-            { icon: '🌍', label: 'Discover', href: '/discover' },
-            { icon: '📔', label: 'Journal', href: '/journal' },
-            { icon: '👥', label: 'Social Feed', href: '/social' },
-            { icon: '⚙️', label: 'Settings', href: '/settings' },
+            { icon: <FaMap className="w-6 h-6" />, label: 'New Trip', href: '/trips/new' },
+            { icon: <FaHotel className="w-6 h-6" />, label: 'Add Booking', href: '/bookings' },
+            { icon: <FaSackDollar className="w-6 h-6" />, label: 'Log Expense', href: '/budget' },
+            { icon: <FaBoxesPacking className="w-6 h-6" />, label: 'Packing List', href: '/packing' },
+            { icon: <FaCompass className="w-6 h-6" />, label: 'Discover', href: '/discover' },
+            { icon: <FaBookOpen className="w-6 h-6" />, label: 'Journal', href: '/journal' },
+            { icon: <FaUsers className="w-6 h-6" />, label: 'Social Feed', href: '/social' },
+            { icon: <FaGear className="w-6 h-6" />, label: 'Settings', href: '/settings' },
           ].map(({ icon, label, href }) => (
             <Link key={label} to={href} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-wandr-blue/20 border border-wandr-border hover:border-wandr-accent/30 hover:bg-wandr-blue/40 transition-all group">
-              <span className="text-2xl group-hover:scale-110 transition-transform">{icon}</span>
+              <span className="text-wandr-accent group-hover:scale-110 transition-transform">{icon}</span>
               <span className="text-xs text-wandr-muted group-hover:text-white transition-colors font-medium">{label}</span>
             </Link>
           ))}

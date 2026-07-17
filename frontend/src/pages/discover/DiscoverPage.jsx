@@ -4,6 +4,7 @@ import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { SparklesIcon, MagnifyingGlassIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+import { FaStar, FaMap } from 'react-icons/fa6';
 import useAuthStore from '../../context/authStore';
 
 export default function DiscoverPage() {
@@ -85,7 +86,7 @@ export default function DiscoverPage() {
                   </button>
                   <div className="text-white font-medium text-sm truncate pr-4">{dest.name}</div>
                   {dest.country && <div className="text-wandr-muted text-xs truncate">{dest.country}</div>}
-                  {dest.rating && <div className="text-wandr-muted text-xs mt-1">⭐ {dest.rating}</div>}
+                  {dest.rating && <div className="text-wandr-muted text-xs mt-1 inline-flex items-center gap-1"><FaStar className="w-3 h-3" /> {dest.rating}</div>}
                 </div>
               );
             })}
@@ -114,7 +115,7 @@ export default function DiscoverPage() {
             {(filter === 'featured' ? featured : trips).map(trip => (
               <div key={trip._id} className="card-hover group overflow-hidden">
                 <div className="h-40 -mx-6 -mt-6 mb-5 overflow-hidden bg-wandr-blue">
-                  {trip.coverImage ? <img src={trip.coverImage} alt={trip.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /> : <div className="w-full h-full bg-gradient-to-br from-wandr-mid to-wandr-blue flex items-center justify-center text-5xl">🗺️</div>}
+                  {trip.coverImage ? <img src={trip.coverImage} alt={trip.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /> : <div className="w-full h-full bg-gradient-to-br from-wandr-mid to-wandr-blue flex items-center justify-center"><FaMap className="w-10 h-10 text-wandr-accent" /></div>}
                 </div>
                 <div className="flex items-center gap-2 mb-2">
                   {trip.owner?.avatar ? <img src={trip.owner.avatar} alt="" className="w-6 h-6 rounded-full object-cover" /> : <div className="w-6 h-6 rounded-full bg-wandr-mid flex items-center justify-center text-xs text-wandr-accent font-semibold">{trip.owner?.firstName?.[0]}</div>}

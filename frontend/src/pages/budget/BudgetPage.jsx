@@ -3,10 +3,10 @@ import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { PlusIcon, TrashIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { BUDGET_CATEGORY_ICONS } from '../../utils/icons';
 
 const categories = ['accommodation', 'transport', 'food', 'activities', 'shopping', 'health', 'visa', 'insurance', 'other'];
 const catColors = { accommodation: '#e8c27a', transport: '#3b82f6', food: '#10b981', activities: '#8b5cf6', shopping: '#ec4899', health: '#ef4444', visa: '#f59e0b', insurance: '#06b6d4', other: '#6b7280' };
-const catIcons = { accommodation: '🏨', transport: '🚌', food: '🍽️', activities: '🎯', shopping: '🛍️', health: '💊', visa: '📋', insurance: '🛡️', other: '📌' };
 
 export default function BudgetPage() {
   const [expenses, setExpenses] = useState([]);
@@ -52,7 +52,7 @@ export default function BudgetPage() {
               <div key={cat} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: catColors[cat] }} />
-                  <span className="text-wandr-text capitalize">{catIcons[cat]} {cat}</span>
+                  <span className="text-wandr-text capitalize">{BUDGET_CATEGORY_ICONS[cat]} {cat}</span>
                 </div>
                 <span className="text-wandr-accent font-medium">${Number(amt).toFixed(2)}</span>
               </div>
@@ -70,7 +70,7 @@ export default function BudgetPage() {
             <div className="space-y-2 max-h-96 overflow-y-auto scrollbar-hide">
               {expenses.map(exp => (
                 <div key={exp._id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-wandr-blue/20 transition-colors group">
-                  <span className="text-lg">{catIcons[exp.category]}</span>
+                  <span>{BUDGET_CATEGORY_ICONS[exp.category]}</span>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-white">{exp.description}</div>
                     <div className="text-xs text-wandr-muted capitalize">{exp.category} - {new Date(exp.date).toLocaleDateString()}</div>
@@ -91,7 +91,7 @@ export default function BudgetPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Category</label>
                   <select className="input-field" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>
-                    {categories.map(c => <option key={c} value={c}>{catIcons[c]} {c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+                    {categories.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
                   </select>
                 </div>
                 <div><label className="label">Date</label><input type="date" className="input-field" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { FaCircleCheck } from 'react-icons/fa6'
 import api from '../../utils/api'
 import toast from 'react-hot-toast'
 
@@ -39,7 +40,7 @@ export default function ResetPasswordPage() {
         <div className="bg-w-navy/80 backdrop-blur-xl border border-w-border rounded-2xl p-8">
           {done ? (
             <div className="text-center py-4">
-              <div className="text-5xl mb-4">✅</div>
+              <div className="mb-4 flex justify-center"><FaCircleCheck className="w-10 h-10 text-emerald-400" /></div>
               <h3 className="text-white font-semibold mb-2">Password Updated!</h3>
               <p className="text-w-muted text-sm">Redirecting you to sign in...</p>
             </div>

@@ -2,6 +2,13 @@ import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PublicLayout from '../../components/layout/PublicLayout'
+import {
+  FaChevronRight, FaCircleInfo, FaLock, FaEnvelope, FaClipboardList, FaCookieBite,
+  FaMoneyBillTransfer, FaEarthAmericas, FaUniversalAccess, FaPaperPlane, FaInbox,
+  FaShieldHalved, FaBriefcase, FaNewspaper, FaUmbrellaBeach,
+  FaPlane, FaLocationDot, FaClock, FaBoxOpen, FaCircleUser, FaDesktop, FaPalette,
+  FaMagnifyingGlass, FaHandshake, FaUser, FaMap, FaCalendarDays, FaSackDollar,
+} from 'react-icons/fa6'
 
 /* ─── Shared helpers ─────────────────────────────────────────────────── */
 const Section = ({ title, children }) => (
@@ -11,14 +18,14 @@ const Section = ({ title, children }) => (
   </div>
 )
 const P = ({ children }) => <p className="text-w-muted leading-7">{children}</p>
-const Li = ({ children }) => <li className="flex gap-2.5 text-w-muted"><span className="text-w-accent mt-1 flex-shrink-0">›</span><span>{children}</span></li>
+const Li = ({ children }) => <li className="flex gap-2.5 text-w-muted"><FaChevronRight className="text-w-accent mt-1 flex-shrink-0 w-3 h-3" /><span>{children}</span></li>
 const Ul = ({ children }) => <ul className="space-y-2 pl-1">{children}</ul>
 const Strong = ({ children }) => <strong className="text-white font-semibold">{children}</strong>
-const InfoBox = ({ icon = 'ℹ️', children, color = 'blue' }) => {
+const InfoBox = ({ icon = <FaCircleInfo />, children, color = 'blue' }) => {
   const colors = { blue: 'bg-blue-500/5 border-blue-500/20 text-blue-300', gold: 'bg-w-accent/5 border-w-accent/20 text-w-accent', green: 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400' }
   return (
     <div className={`flex gap-3 p-4 rounded-xl border ${colors[color]} text-sm`}>
-      <span className="text-lg flex-shrink-0">{icon}</span>
+      <span className="w-5 h-5 flex-shrink-0 [&>svg]:w-5 [&>svg]:h-5">{icon}</span>
       <span className="leading-relaxed">{children}</span>
     </div>
   )
@@ -28,7 +35,7 @@ const InfoBox = ({ icon = 'ℹ️', children, color = 'blue' }) => {
 export function PrivacyPolicyPage() {
   return (
     <PublicLayout title="Privacy Policy" subtitle="Last updated: April 8, 2025" breadcrumb="Privacy Policy">
-      <InfoBox icon="🔒" color="gold">We believe in radical transparency. This policy explains exactly what data we collect, why we collect it, and how you can control it.</InfoBox>
+      <InfoBox icon={<FaLock />} color="gold">We believe in radical transparency. This policy explains exactly what data we collect, why we collect it, and how you can control it.</InfoBox>
       <div className="mt-10">
         <Section title="1. Information We Collect">
           <P><Strong>Account Information.</Strong> When you register, we collect your first name, last name, email address, and password (stored as a one-way bcrypt hash — we never see your actual password).</P>
@@ -68,7 +75,7 @@ export function PrivacyPolicyPage() {
             <Li><Strong>Portability</Strong> — export your trips as JSON or PDF</Li>
             <Li><Strong>Objection</Strong> — opt out of marketing emails anytime</Li>
           </Ul>
-          <InfoBox icon="✉️" color="blue">To exercise any right or for privacy questions, contact us at <strong>privacy@wandr.travel</strong></InfoBox>
+          <InfoBox icon={<FaEnvelope />} color="blue">To exercise any right or for privacy questions, contact us at <strong>privacy@wandr.travel</strong></InfoBox>
         </Section>
         <Section title="6. Cookies">
           <P>We use essential cookies for authentication (JWT tokens stored in localStorage) and optional analytics cookies. See our <Link to="/cookies" className="text-w-accent hover:text-w-gold underline">Cookie Policy</Link> for full details.</P>
@@ -91,7 +98,7 @@ export function PrivacyPolicyPage() {
 export function TermsOfServicePage() {
   return (
     <PublicLayout title="Terms of Service" subtitle="Effective: April 8, 2025" breadcrumb="Terms of Service">
-      <InfoBox icon="📋" color="gold">By using Wandr, you agree to these terms. Please read them — they're written in plain English, not legalese.</InfoBox>
+      <InfoBox icon={<FaClipboardList />} color="gold">By using Wandr, you agree to these terms. Please read them — they're written in plain English, not legalese.</InfoBox>
       <div className="mt-10">
         <Section title="1. Acceptance of Terms">
           <P>By accessing or using Wandr ("the Service"), you agree to be bound by these Terms. If you disagree, do not use the Service. These Terms apply to all users including travelers, collaborators, and any visitors to public content.</P>
@@ -156,7 +163,7 @@ export function CookiePolicyPage() {
   const [consent, setConsent] = useState({ analytics: true, marketing: false })
   return (
     <PublicLayout title="Cookie Policy" subtitle="Last updated: April 8, 2025" breadcrumb="Cookie Policy">
-      <InfoBox icon="🍪" color="gold">We use cookies to keep you signed in and to understand how Wandr is used. Here's exactly what we set and why.</InfoBox>
+      <InfoBox icon={<FaCookieBite />} color="gold">We use cookies to keep you signed in and to understand how Wandr is used. Here's exactly what we set and why.</InfoBox>
       <div className="mt-10">
         <Section title="What Are Cookies?">
           <P>Cookies are small text files placed on your device by websites you visit. Wandr uses a mix of localStorage tokens and standard HTTP cookies to function correctly.</P>
@@ -215,11 +222,11 @@ export function CookiePolicyPage() {
 export function RefundPolicyPage() {
   return (
     <PublicLayout title="Refund Policy" subtitle="Simple, fair, and transparent." breadcrumb="Refund Policy">
-      <InfoBox icon="💰" color="green">We want you to be happy with Wandr. If something isn't right, we'll make it right.</InfoBox>
+      <InfoBox icon={<FaMoneyBillTransfer />} color="green">We want you to be happy with Wandr. If something isn't right, we'll make it right.</InfoBox>
       <div className="mt-10">
         <Section title="14-Day Money-Back Guarantee">
           <P>If you upgrade to a paid plan and are not satisfied within the first <Strong>14 days</Strong>, contact us for a full, no-questions-asked refund. No hoops, no conditions.</P>
-          <InfoBox icon="📧" color="blue">Email refund@wandr.travel with your account email and we'll process it within 3 business days.</InfoBox>
+          <InfoBox icon={<FaEnvelope />} color="blue">Email refund@wandr.travel with your account email and we'll process it within 3 business days.</InfoBox>
         </Section>
         <Section title="After the 14-Day Period">
           <P>After 14 days, we consider refunds on a case-by-case basis for:</P>
@@ -253,7 +260,7 @@ export function RefundPolicyPage() {
 export function AcceptableUsePage() {
   return (
     <PublicLayout title="Acceptable Use Policy" subtitle="Keep it respectful. Keep it real." breadcrumb="Acceptable Use">
-      <InfoBox icon="🌍" color="gold">Wandr exists to bring travelers together. This policy ensures it stays a place everyone loves.</InfoBox>
+      <InfoBox icon={<FaEarthAmericas />} color="gold">Wandr exists to bring travelers together. This policy ensures it stays a place everyone loves.</InfoBox>
       <div className="mt-10">
         <Section title="The Spirit of This Policy">
           <P>Wandr is built on trust — trust between travelers, trust in the content on our platform, and trust that everyone is here in good faith. This policy codifies what "good faith" means.</P>
@@ -298,7 +305,7 @@ export function AcceptableUsePage() {
 export function AccessibilityPage() {
   return (
     <PublicLayout title="Accessibility Statement" subtitle="Travel is for everyone." breadcrumb="Accessibility">
-      <InfoBox icon="♿" color="gold">We are committed to making Wandr accessible to all travelers, regardless of ability or disability.</InfoBox>
+      <InfoBox icon={<FaUniversalAccess />} color="gold">We are committed to making Wandr accessible to all travelers, regardless of ability or disability.</InfoBox>
       <div className="mt-10">
         <Section title="Our Commitment">
           <P>Wandr strives to meet the <Strong>WCAG 2.1 Level AA</Strong> accessibility guidelines. We believe that planning a journey should be possible for everyone, and we work continuously to remove barriers in our platform.</P>
@@ -324,7 +331,7 @@ export function AccessibilityPage() {
         </Section>
         <Section title="Feedback">
           <P>If you encounter an accessibility barrier, please tell us. We treat accessibility issues as critical bugs.</P>
-          <InfoBox icon="✉️" color="blue">Email <strong>accessibility@wandr.travel</strong> — we respond within 2 business days and aim to resolve issues within 10.</InfoBox>
+          <InfoBox icon={<FaEnvelope />} color="blue">Email <strong>accessibility@wandr.travel</strong> — we respond within 2 business days and aim to resolve issues within 10.</InfoBox>
         </Section>
         <Section title="Third-Party Tools">
           <P>Wandr uses some third-party components (maps, payment forms) that may not fully meet our accessibility standards. We are working with those providers to improve this.</P>
@@ -346,7 +353,7 @@ export function ContactPage() {
         <div className="md:col-span-2">
           {sent ? (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="card text-center py-16">
-              <div className="text-5xl mb-5">🌍</div>
+              <div className="mb-5 flex justify-center"><FaEarthAmericas className="w-12 h-12 text-w-accent" /></div>
               <h3 className="font-display text-2xl text-white mb-3">Message Sent!</h3>
               <p className="text-w-muted">We'll get back to you within 24 hours. Safe travels!</p>
               <button onClick={() => setSent(false)} className="btn-outline mt-8 text-sm">Send Another Message</button>
@@ -372,22 +379,22 @@ export function ContactPage() {
                 </select>
               </div>
               <div><label className="label">Message</label><textarea className="input resize-none min-h-[140px]" placeholder="Tell us how we can help..." value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} required /></div>
-              <button type="submit" className="btn-primary w-full py-3.5">Send Message ✈️</button>
+              <button type="submit" className="btn-primary w-full py-3.5">Send Message <FaPaperPlane className="inline w-4 h-4 ml-1" /></button>
             </form>
           )}
         </div>
 
         <div className="space-y-5">
           {[
-            { icon: '📧', label: 'General', email: 'hello@wandr.travel', desc: 'General inquiries' },
-            { icon: '🛡️', label: 'Support', email: 'support@wandr.travel', desc: 'Account & technical help' },
-            { icon: '🔒', label: 'Privacy', email: 'privacy@wandr.travel', desc: 'Data & privacy questions' },
-            { icon: '💼', label: 'Business', email: 'partnerships@wandr.travel', desc: 'B2B & partnerships' },
-            { icon: '📰', label: 'Press', email: 'press@wandr.travel', desc: 'Media inquiries' },
+            { icon: <FaEnvelope className="w-6 h-6" />, label: 'General', email: 'hello@wandr.travel', desc: 'General inquiries' },
+            { icon: <FaShieldHalved className="w-6 h-6" />, label: 'Support', email: 'support@wandr.travel', desc: 'Account & technical help' },
+            { icon: <FaLock className="w-6 h-6" />, label: 'Privacy', email: 'privacy@wandr.travel', desc: 'Data & privacy questions' },
+            { icon: <FaBriefcase className="w-6 h-6" />, label: 'Business', email: 'partnerships@wandr.travel', desc: 'B2B & partnerships' },
+            { icon: <FaNewspaper className="w-6 h-6" />, label: 'Press', email: 'press@wandr.travel', desc: 'Media inquiries' },
           ].map(({ icon, label, email, desc }) => (
             <div key={label} className="card-hover p-4">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{icon}</span>
+                <span>{icon}</span>
                 <div>
                   <div className="text-white font-medium text-sm">{label}</div>
                   <a href={`mailto:${email}`} className="text-w-accent text-xs hover:text-w-gold transition-colors">{email}</a>
@@ -485,9 +492,9 @@ export function CareersPage() {
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-14">
-        {[['Remote-first','🌍'],['Unlimited PTO','🏖️'],['$2K Travel Stipend','✈️']].map(([b, e]) => (
+        {[['Remote-first',<FaEarthAmericas className="w-6 h-6" />],['Unlimited PTO',<FaUmbrellaBeach className="w-6 h-6" />],['$2K Travel Stipend',<FaPlane className="w-6 h-6" />]].map(([b, e]) => (
           <div key={b} className="card text-center py-5">
-            <div className="text-2xl mb-2">{e}</div>
+            <div className="mb-2 flex justify-center">{e}</div>
             <div className="text-white text-sm font-medium">{b}</div>
           </div>
         ))}
@@ -501,8 +508,8 @@ export function CareersPage() {
                 <h3 className="text-white font-semibold">{r.title}</h3>
                 <div className="flex gap-3 mt-1.5 text-xs text-w-muted">
                   <span className="badge-blue">{r.team}</span>
-                  <span>📍 {r.location}</span>
-                  <span>⏱ {r.type}</span>
+                  <span className="inline-flex items-center gap-1"><FaLocationDot className="w-3 h-3" /> {r.location}</span>
+                  <span className="inline-flex items-center gap-1"><FaClock className="w-3 h-3" /> {r.type}</span>
                 </div>
               </div>
               <a href="mailto:careers@wandr.travel" className="btn-outline text-sm flex-shrink-0">Apply →</a>
@@ -511,7 +518,7 @@ export function CareersPage() {
         </div>
       </Section>
 
-      <InfoBox icon="💌" color="gold">Don't see your role? Send us a note at <strong>careers@wandr.travel</strong> — we hire for talent, not just open positions.</InfoBox>
+      <InfoBox icon={<FaPaperPlane />} color="gold">Don't see your role? Send us a note at <strong>careers@wandr.travel</strong> — we hire for talent, not just open positions.</InfoBox>
     </PublicLayout>
   )
 }
@@ -528,13 +535,13 @@ export function PressPage() {
     <PublicLayout title="Press Room" subtitle="Media resources and brand assets." breadcrumb="Press">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         {[
-          { label: 'Press Kit (ZIP)', icon: '📦', desc: 'Logos, screenshots, brand guidelines' },
-          { label: 'Founder Bio & Photos', icon: '👤', desc: 'High-res photos and short bios' },
-          { label: 'Product Screenshots', icon: '🖥️', desc: 'App screenshots in all sizes' },
-          { label: 'Brand Guidelines', icon: '🎨', desc: 'Colours, fonts, usage rules' },
+          { label: 'Press Kit (ZIP)', icon: <FaBoxOpen className="w-8 h-8" />, desc: 'Logos, screenshots, brand guidelines' },
+          { label: 'Founder Bio & Photos', icon: <FaCircleUser className="w-8 h-8" />, desc: 'High-res photos and short bios' },
+          { label: 'Product Screenshots', icon: <FaDesktop className="w-8 h-8" />, desc: 'App screenshots in all sizes' },
+          { label: 'Brand Guidelines', icon: <FaPalette className="w-8 h-8" />, desc: 'Colours, fonts, usage rules' },
         ].map(({ label, icon, desc }) => (
           <button key={label} className="card-hover text-left p-5 flex gap-4 items-start">
-            <span className="text-3xl">{icon}</span>
+            <span>{icon}</span>
             <div><div className="text-white font-semibold">{label}</div><div className="text-w-muted text-sm mt-0.5">{desc}</div></div>
           </button>
         ))}
@@ -544,7 +551,7 @@ export function PressPage() {
         <div className="space-y-3">
           {COVERAGE.map(c => (
             <div key={c.headline} className="card p-4 flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-w-blue flex items-center justify-center text-lg flex-shrink-0">📰</div>
+              <div className="w-12 h-12 rounded-xl bg-w-blue flex items-center justify-center flex-shrink-0"><FaNewspaper className="w-5 h-5 text-w-accent" /></div>
               <div>
                 <div className="text-w-accent text-xs font-semibold mb-1">{c.outlet}</div>
                 <div className="text-white text-sm font-medium">{c.headline}</div>
@@ -555,7 +562,7 @@ export function PressPage() {
         </div>
       </Section>
 
-      <InfoBox icon="📬" color="blue">For press inquiries, interviews, or editorial access — contact <strong>press@wandr.travel</strong>. We respond within 4 hours during business days.</InfoBox>
+      <InfoBox icon={<FaInbox />} color="blue">For press inquiries, interviews, or editorial access — contact <strong>press@wandr.travel</strong>. We respond within 4 hours during business days.</InfoBox>
     </PublicLayout>
   )
 }
@@ -578,14 +585,14 @@ export function HelpCenterPage() {
   return (
     <PublicLayout title="Help Center" subtitle="Find answers fast." breadcrumb="Help">
       <div className="relative mb-10">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-w-muted">🔍</span>
+        <FaMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-w-muted w-4 h-4" />
         <input className="input pl-11 text-base py-4" placeholder="Search help articles..." value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
-        {[['🗺️','Trip Planning'],['📅','Bookings'],['💰','Budget'],['👤','Account']].map(([e, l]) => (
+        {[[<FaMap className="w-6 h-6" />,'Trip Planning'],[<FaCalendarDays className="w-6 h-6" />,'Bookings'],[<FaSackDollar className="w-6 h-6" />,'Budget'],[<FaUser className="w-6 h-6" />,'Account']].map(([e, l]) => (
           <button key={l} className="card-hover text-center py-5 px-3">
-            <div className="text-2xl mb-2">{e}</div>
+            <div className="mb-2 flex justify-center">{e}</div>
             <div className="text-white text-sm font-medium">{l}</div>
           </button>
         ))}
@@ -606,7 +613,7 @@ export function HelpCenterPage() {
       </Section>
 
       <div className="card mt-10 text-center py-10">
-        <div className="text-3xl mb-3">🤝</div>
+        <div className="mb-3 flex justify-center"><FaHandshake className="w-8 h-8 text-w-accent" /></div>
         <h3 className="font-display text-xl text-white mb-2">Still need help?</h3>
         <p className="text-w-muted text-sm mb-5">Our support team replies within 24 hours on business days.</p>
         <Link to="/contact" className="btn-primary text-sm">Contact Support</Link>

@@ -1,6 +1,7 @@
 // frontend/src/pages/DestinationDetail.jsx
 import React from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
+import { FaCalendarDays, FaStar, FaBullseye, FaUtensils, FaPlane, FaHotel } from 'react-icons/fa6'
 
 const DESTINATIONS_DATA = {
   'Santorini': {
@@ -168,18 +169,18 @@ export default function DestinationDetail() {
                 <h2 className="font-display text-2xl text-white mb-4">Best Time to Visit</h2>
                 <div className="bg-w-accent/10 border border-w-accent/20 rounded-xl p-4">
                   <p className="text-w-text">
-                    <span className="text-w-accent font-semibold">📅 Recommended:</span> {destination.bestTime}
+                    <span className="text-w-accent font-semibold inline-flex items-center gap-1"><FaCalendarDays className="w-4 h-4" /> Recommended:</span> {destination.bestTime}
                   </p>
                 </div>
               </section>
 
               {/* Top Attractions */}
               <section>
-                <h2 className="font-display text-2xl text-white mb-4">✨ Top Attractions</h2>
+                <h2 className="font-display text-2xl text-white mb-4 inline-flex items-center gap-2"><FaStar className="w-5 h-5 text-w-accent" /> Top Attractions</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {destination.topAttractions.map((attraction, idx) => (
                     <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-w-blue/20 border border-w-border">
-                      <span className="text-w-accent text-lg">★</span>
+                      <FaStar className="text-w-accent w-4 h-4 flex-shrink-0" />
                       <span className="text-w-text">{attraction}</span>
                     </div>
                   ))}
@@ -188,7 +189,7 @@ export default function DestinationDetail() {
 
               {/* Activities */}
               <section>
-                <h2 className="font-display text-2xl text-white mb-4">🎯 Popular Activities</h2>
+                <h2 className="font-display text-2xl text-white mb-4 inline-flex items-center gap-2"><FaBullseye className="w-5 h-5 text-w-accent" /> Popular Activities</h2>
                 <div className="flex flex-wrap gap-2">
                   {destination.activities.map((activity, idx) => (
                     <span key={idx} className="bg-w-accent/10 border border-w-accent/20 text-w-accent text-sm px-4 py-2 rounded-full">
@@ -200,7 +201,7 @@ export default function DestinationDetail() {
 
               {/* Local Cuisine */}
               <section>
-                <h2 className="font-display text-2xl text-white mb-4">🍽️ Local Cuisine</h2>
+                <h2 className="font-display text-2xl text-white mb-4 inline-flex items-center gap-2"><FaUtensils className="w-5 h-5 text-w-accent" /> Local Cuisine</h2>
                 <p className="text-w-muted leading-relaxed">{destination.cuisine}</p>
               </section>
             </div>
@@ -211,14 +212,14 @@ export default function DestinationDetail() {
               <div className="bg-w-blue/20 border border-w-border rounded-xl p-6  top-24">
                 <h3 className="text-white font-semibold text-lg mb-4">Plan Your Trip</h3>
                 <div className="space-y-4">
-                  <button className="bg-w-accent text-w-dark font-semibold py-3 px-4 rounded-xl hover:bg-w-gold transition-colors w-full">
-                    ✈️ Book Flights
+                  <button className="bg-w-accent text-w-dark font-semibold py-3 px-4 rounded-xl hover:bg-w-gold transition-colors w-full inline-flex items-center justify-center gap-2">
+                    <FaPlane className="w-4 h-4" /> Book Flights
                   </button>
-                  <button className="border border-w-border text-w-text py-3 px-4 rounded-xl hover:border-w-accent hover:text-w-accent transition-colors w-full">
-                    🏨 Find Hotels
+                  <button className="border border-w-border text-w-text py-3 px-4 rounded-xl hover:border-w-accent hover:text-w-accent transition-colors w-full inline-flex items-center justify-center gap-2">
+                    <FaHotel className="w-4 h-4" /> Find Hotels
                   </button>
-                  <button className="border border-w-border text-w-text py-3 px-4 rounded-xl hover:border-w-accent hover:text-w-accent transition-colors w-full">
-                    📅 Create Itinerary
+                  <button className="border border-w-border text-w-text py-3 px-4 rounded-xl hover:border-w-accent hover:text-w-accent transition-colors w-full inline-flex items-center justify-center gap-2">
+                    <FaCalendarDays className="w-4 h-4" /> Create Itinerary
                   </button>
                 </div>
                 <div className="mt-6 pt-6 border-t border-w-border">

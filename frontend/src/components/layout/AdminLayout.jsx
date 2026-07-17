@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import useAuthStore from '../../context/authStore'
+import { ADMIN_NAV_ICONS } from '../../utils/icons'
 
 const ADMIN_NAV = [
-  { to:'/admin',           icon:'📊', label:'Dashboard', exact:true },
-  { to:'/admin/users',     icon:'👥', label:'Users'    },
-  { to:'/admin/trips',     icon:'🗺️', label:'Trips'    },
-  { to:'/admin/bookings',  icon:'📅', label:'Bookings' },
-  { to:'/admin/activity',  icon:'⏰', label:'Activity'  },
-  { to:'/admin/settings',  icon:'⚙️', label:'Settings'  },
+  { to:'/admin',           icon:ADMIN_NAV_ICONS.dashboard, label:'Dashboard', exact:true },
+  { to:'/admin/users',     icon:ADMIN_NAV_ICONS.users,     label:'Users'    },
+  { to:'/admin/trips',     icon:ADMIN_NAV_ICONS.trips,     label:'Trips'    },
+  { to:'/admin/bookings',  icon:ADMIN_NAV_ICONS.bookings,  label:'Bookings' },
+  { to:'/admin/activity',  icon:ADMIN_NAV_ICONS.activity,  label:'Activity'  },
+  { to:'/admin/settings',  icon:ADMIN_NAV_ICONS.settings,  label:'Settings'  },
 ]
 
 function AdminSidebar({ onClose }) {
@@ -40,18 +41,18 @@ function AdminSidebar({ onClose }) {
             className={({ isActive }) => isActive
               ? 'flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-purple-300 bg-purple-500/15 border border-purple-500/25'
               : 'flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-w-muted hover:text-white hover:bg-white/5 transition-all'}>
-            <span className="text-base w-5">{icon}</span><span>{label}</span>
+            <span className="w-5">{icon}</span><span>{label}</span>
           </NavLink>
         ))}
         <div className="pt-3 mt-3 border-t border-purple-900/30">
           <NavLink to="/dashboard" onClick={onClose} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-w-muted hover:text-w-accent hover:bg-w-accent/5 transition-all">
-            <span className="text-base w-5">🏠</span><span>Client View</span>
+            <span className="w-5">{ADMIN_NAV_ICONS.clientView}</span><span>Client View</span>
           </NavLink>
         </div>
       </nav>
       <div className="px-3 py-3 border-t border-purple-900/40">
         <button onClick={handleLogout} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 w-full transition-all">
-          <span className="text-base w-5">🚪</span><span>Sign Out</span>
+          <span className="w-5">{ADMIN_NAV_ICONS.signOut}</span><span>Sign Out</span>
         </button>
       </div>
     </div>

@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { PlusIcon, TrashIcon, CheckIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
-
-const categoryIcons = { sightseeing: '🏛️', dining: '🍽️', adventure: '🧗', transport: '🚌', accommodation: '🏨', other: '📍' };
+import { ITINERARY_CATEGORY_ICONS } from '../../utils/icons';
+import { FaMoon, FaHotel, FaCalendarDays, FaClock } from 'react-icons/fa6';
 
 export default function ItineraryPage() {
   const { id } = useParams();
@@ -128,9 +128,9 @@ export default function ItineraryPage() {
                     <h2 className="font-display text-2xl text-white font-semibold">{activeDest.name}</h2>
                     {activeDest.country && <p className="text-wandr-muted text-sm">{activeDest.country}</p>}
                     <div className="flex flex-wrap gap-3 mt-2 text-xs text-wandr-muted">
-                      {activeDest.nights && <span>🌙 {activeDest.nights} night{activeDest.nights > 1 ? 's' : ''}</span>}
-                      {activeDest.accommodation && <span>🏨 {activeDest.accommodation}</span>}
-                      {activeDest.arrivalDate && <span>📅 Arrives {new Date(activeDest.arrivalDate).toLocaleDateString()}</span>}
+                      {activeDest.nights && <span className="inline-flex items-center gap-1"><FaMoon className="w-3 h-3" /> {activeDest.nights} night{activeDest.nights > 1 ? 's' : ''}</span>}
+                      {activeDest.accommodation && <span className="inline-flex items-center gap-1"><FaHotel className="w-3 h-3" /> {activeDest.accommodation}</span>}
+                      {activeDest.arrivalDate && <span className="inline-flex items-center gap-1"><FaCalendarDays className="w-3 h-3" /> Arrives {new Date(activeDest.arrivalDate).toLocaleDateString()}</span>}
                     </div>
                   </div>
                   <button onClick={() => setShowAddActivity(true)} className="btn-primary text-sm px-4 py-2 flex items-center gap-2">
@@ -152,9 +152,9 @@ export default function ItineraryPage() {
                         </button>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm">{categoryIcons[act.category]}</span>
+                            <span className="text-sm">{ITINERARY_CATEGORY_ICONS[act.category]}</span>
                             <span className={`font-medium text-sm ${act.completed ? 'line-through text-wandr-muted' : 'text-white'}`}>{act.name}</span>
-                            {act.time && <span className="text-xs text-wandr-muted">⏰ {act.time}</span>}
+                            {act.time && <span className="text-xs text-wandr-muted inline-flex items-center gap-1"><FaClock className="w-3 h-3" /> {act.time}</span>}
                             {act.duration && <span className="text-xs text-wandr-muted">({act.duration})</span>}
                             {act.cost > 0 && <span className="text-xs text-wandr-accent">${act.cost}</span>}
                           </div>
@@ -208,7 +208,7 @@ export default function ItineraryPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Category</label>
                   <select className="input-field" value={newActivity.category} onChange={e => setNewActivity({ ...newActivity, category: e.target.value })}>
-                    {Object.keys(categoryIcons).map(c => <option key={c} value={c}>{categoryIcons[c]} {c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+                    {Object.keys(ITINERARY_CATEGORY_ICONS).map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
                   </select>
                 </div>
                 <div><label className="label">Time</label><input className="input-field" placeholder="9:00 AM" value={newActivity.time} onChange={e => setNewActivity({ ...newActivity, time: e.target.value })} /></div>

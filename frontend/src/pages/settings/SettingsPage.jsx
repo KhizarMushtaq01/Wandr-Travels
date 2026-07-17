@@ -4,6 +4,7 @@ import useAuthStore from '../../context/authStore';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { EyeIcon, EyeSlashIcon, ShieldCheckIcon, BellIcon, UserIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { FaKey, FaHand, FaLock, FaTriangleExclamation } from 'react-icons/fa6';
 
 const tabs = [
   { id: 'profile', label: 'Profile', icon: UserIcon },
@@ -30,7 +31,7 @@ export default function SettingsPage() {
     setSaving(true);
     const result = await updatePassword(pwForm);
     setSaving(false);
-    if (result.success) { toast.success('Password changed! 🔑 Check your email for confirmation.'); setPwForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }
+    if (result.success) { toast.success(<><FaKey className="inline w-4 h-4 mr-1" /> Password changed! Check your email for confirmation.</>); setPwForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }
   };
 
   const handleNotificationsSave = async () => {
@@ -45,10 +46,10 @@ export default function SettingsPage() {
 
   const handleDeleteAccount = async (e) => {
     e.preventDefault();
-    if (!window.confirm('⚠️ This is permanent. Are you absolutely sure?')) return;
+    if (!window.confirm('This is permanent. Are you absolutely sure?')) return;
     try {
       await api.delete('/users/me', { data: { password: deletePassword } });
-      toast.success('Account deleted. Goodbye! 👋');
+      toast.success(<>Account deleted. Goodbye! <FaHand className="inline w-4 h-4 ml-1" /></>);
       await logout();
       navigate('/');
     } catch (e) {}
@@ -101,7 +102,7 @@ export default function SettingsPage() {
             <div className="card space-y-5">
               <h2 className="font-display text-xl text-white font-semibold">Change Password</h2>
               <div className="p-3 rounded-xl bg-wandr-blue/20 border border-wandr-border text-xs text-wandr-muted">
-                🔑 A confirmation email will be sent to {user?.email} when your password is changed.
+                <FaKey className="inline w-3.5 h-3.5 mr-1" /> A confirmation email will be sent to {user?.email} when your password is changed.
               </div>
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 {[
@@ -129,7 +130,7 @@ export default function SettingsPage() {
                 <div className="space-y-2">
                   {(user?.loginHistory || []).slice(0, 3).map((log, i) => (
                     <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-wandr-blue/20 text-xs">
-                      <span className="text-lg">🔐</span>
+                      <FaLock className="w-4 h-4" />
                       <div>
                         <div className="text-white font-medium">{new Date(log.timestamp).toLocaleString()}</div>
                         <div className="text-wandr-muted mt-0.5">{log.ip} · {log.device?.substring(0, 60)}</div>
@@ -177,7 +178,7 @@ export default function SettingsPage() {
             <div className="card border-red-500/20 space-y-5">
               <h2 className="font-display text-xl text-red-400 font-semibold">Danger Zone</h2>
               <div className="p-4 rounded-xl bg-red-500/5 border border-red-500/20">
-                <p className="text-sm text-red-300 font-medium mb-1">⚠️ Delete Account</p>
+                <p className="text-sm text-red-300 font-medium mb-1 inline-flex items-center gap-2"><FaTriangleExclamation className="w-4 h-4" /> Delete Account</p>
                 <p className="text-xs text-red-300/70">This action is permanent. All your trips, bookings, journals and data will be deleted immediately. A confirmation email will be sent.</p>
               </div>
               <form onSubmit={handleDeleteAccount} className="space-y-4">
