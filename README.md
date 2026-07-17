@@ -129,11 +129,10 @@ cd backend && npm install
 cd ../frontend && npm install
 ```
 
-### 2. Configure Email (Gmail)
-1. Go to [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-2. Enable 2FA if not already done
-3. Create app password → select "Mail"
-4. Copy the 16-character code
+### 2. Configure Email (Resend)
+1. Sign up at [resend.com](https://resend.com)
+2. Get an API key from your account dashboard
+3. Verify your sending domain in the Resend dashboard
 
 Edit `backend/.env`:
 ```env
@@ -141,11 +140,8 @@ PORT=5000
 MONGO_URI=mongodb://localhost:27017/wandr
 JWT_SECRET=your_random_secret_here
 
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your@gmail.com
-EMAIL_PASS=xxxx xxxx xxxx xxxx
-EMAIL_FROM=Wandr Travel <your@gmail.com>
+RESEND_API_KEY=your_resend_api_key
+EMAIL_FROM=Wandr Travel <noreply@yourdomain.com>
 
 CLIENT_URL=http://localhost:3000
 ```
