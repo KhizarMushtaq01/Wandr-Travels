@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Trip = require('../models/Trip');
 const Booking = require('../models/Booking');
 const { Expense, Journal, Notification } = require('../models/Extras');
+const { AdminAuditLog, logAdminAction } = require('../models/AdminAuditLog');
 
 exports.getDashboardStats = async (req, res, next) => {
   try {
@@ -92,6 +93,7 @@ exports.sendBroadcastEmail = async (req, res, next) => {
         sent++;
       } catch (e) {}
     }
+    logAdminAction(req.user._id, 'send_broadcast', 'Broadcast', null, `"${subject}" to ${sent} users (${userRole || 'all'})`);
     res.json({ success: true, message: `Broadcast sent to ${sent} users` });
   } catch (err) { next(err); }
 };
@@ -110,5 +112,19 @@ exports.getSystemHealth = async (req, res, next) => {
         timestamp: new Date()
       }
     });
+  } catch (err) { next(err); }
+};
+
+// @desc Get admin action audit log (admin)
+exports.getAuditLog = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const [logs, total] = await Promise.all([
+      AdminAuditLog.find().populate('admin', 'firstName lastName email').sort('-createdAt').skip(skip).limit(limit),
+      AdminAuditLog.countDocuments()
+    ]);
+    res.json({ success: true, logs, total, page, pages: Math.ceil(total / limit) });
   } catch (err) { next(err); }
 };
