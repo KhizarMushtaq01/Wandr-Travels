@@ -100,7 +100,7 @@ export function BookingsPage() {
           <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">Add New Booking</h3>
             <form onSubmit={handleAdd} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Type</label>
                   <select className="input-field" value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
                     {bookingTypes.map(t => <option key={t} value={t}>{typeIcons[t]} {t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
@@ -113,15 +113,15 @@ export function BookingsPage() {
                 </div>
               </div>
               <div><label className="label">Name *</label><input className="input-field" placeholder="e.g. Aloft Bangkok Hotel" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required /></div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Provider</label><input className="input-field" placeholder="Booking.com" value={form.provider} onChange={e => setForm({ ...form, provider: e.target.value })} /></div>
                 <div><label className="label">Reference #</label><input className="input-field" placeholder="ABC123" value={form.bookingReference} onChange={e => setForm({ ...form, bookingReference: e.target.value })} /></div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Check-in / Date</label><input type="date" className="input-field" value={form.checkIn} onChange={e => setForm({ ...form, checkIn: e.target.value })} /></div>
                 <div><label className="label">Check-out</label><input type="date" className="input-field" value={form.checkOut} onChange={e => setForm({ ...form, checkOut: e.target.value })} /></div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Total Amount</label><input type="number" className="input-field" placeholder="0.00" value={form.totalAmount} onChange={e => setForm({ ...form, totalAmount: e.target.value })} /></div>
                 <div><label className="label">Currency</label>
                   <select className="input-field" value={form.currency} onChange={e => setForm({ ...form, currency: e.target.value })}>

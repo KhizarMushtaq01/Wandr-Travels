@@ -179,11 +179,11 @@ export default function ItineraryPage() {
           <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">Add Destination</h3>
             <form onSubmit={addDestination} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">City / Place *</label><input className="input-field" placeholder="Bali" value={newDest.name} onChange={e => setNewDest({ ...newDest, name: e.target.value })} required /></div>
                 <div><label className="label">Country</label><input className="input-field" placeholder="Indonesia" value={newDest.country} onChange={e => setNewDest({ ...newDest, country: e.target.value })} /></div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Arrival Date</label><input type="date" className="input-field" value={newDest.arrivalDate} onChange={e => setNewDest({ ...newDest, arrivalDate: e.target.value })} /></div>
                 <div><label className="label">Nights</label><input type="number" min="1" className="input-field" value={newDest.nights} onChange={e => setNewDest({ ...newDest, nights: Number(e.target.value) })} /></div>
               </div>
@@ -205,7 +205,7 @@ export default function ItineraryPage() {
             <h3 className="font-display text-xl text-white font-semibold mb-5">Add Activity — {activeDest?.name}</h3>
             <form onSubmit={addActivity} className="space-y-4">
               <div><label className="label">Activity Name *</label><input className="input-field" placeholder="Visit Temple" value={newActivity.name} onChange={e => setNewActivity({ ...newActivity, name: e.target.value })} required /></div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Category</label>
                   <select className="input-field" value={newActivity.category} onChange={e => setNewActivity({ ...newActivity, category: e.target.value })}>
                     {Object.keys(categoryIcons).map(c => <option key={c} value={c}>{categoryIcons[c]} {c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
@@ -213,7 +213,7 @@ export default function ItineraryPage() {
                 </div>
                 <div><label className="label">Time</label><input className="input-field" placeholder="9:00 AM" value={newActivity.time} onChange={e => setNewActivity({ ...newActivity, time: e.target.value })} /></div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Duration</label><input className="input-field" placeholder="2 hours" value={newActivity.duration} onChange={e => setNewActivity({ ...newActivity, duration: e.target.value })} /></div>
                 <div><label className="label">Cost ($)</label><input type="number" min="0" className="input-field" value={newActivity.cost} onChange={e => setNewActivity({ ...newActivity, cost: Number(e.target.value) })} /></div>
               </div>

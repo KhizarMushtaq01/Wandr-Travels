@@ -121,7 +121,7 @@ export function CreateTripPage() {
           <textarea className="input-field min-h-[90px] resize-none" placeholder="What's this trip about?" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Start Date</label>
             <input type="date" className="input-field" value={form.startDate} onChange={e => setForm({ ...form, startDate: e.target.value })} />
@@ -132,7 +132,7 @@ export function CreateTripPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Trip Type</label>
             <select className="input-field" value={form.tripType} onChange={e => setForm({ ...form, tripType: e.target.value })}>
@@ -147,7 +147,7 @@ export function CreateTripPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Total Budget ({form.currency})</label>
             <input type="number" className="input-field" placeholder="0.00" value={form.totalBudget} onChange={e => setForm({ ...form, totalBudget: e.target.value })} />
