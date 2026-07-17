@@ -57,7 +57,12 @@ const useAuthStore = create((set, get) => ({
       set({ user: res.data.user });
       localStorage.setItem('wandr_user', JSON.stringify(res.data.user));
     } catch (e) {
-      get().logout();
+      // Only a real auth failure (invalid/expired token) should log the user out.
+      // Transient failures (rate limiting, network errors, server hiccups) must not
+      // clear a perfectly valid session.
+      if (e.response?.status === 401) {
+        get().logout();
+      }
     }
   },
 
