@@ -50,6 +50,7 @@ app.use('/api/auth', authLimiter, require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/trips', require('./routes/trips'));
 app.use('/api/destinations', require('./routes/destinations'));
+app.use('/api/search', require('./routes/search'));
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/itineraries', require('./routes/itineraries'));
 app.use('/api/budget', require('./routes/budget'));
