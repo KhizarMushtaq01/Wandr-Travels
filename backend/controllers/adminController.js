@@ -97,8 +97,7 @@ exports.sendBroadcastEmail = async (req, res, next) => {
     let sent = 0;
     for (const user of users) {
       try {
-        await emailService.sendEmail?.({ to: user.email, subject, html: message }) ||
-          console.log(`Would send to ${user.email}`);
+        await emailService.sendEmail({ to: user.email, subject, html: message });
         sent++;
       } catch (e) {}
     }

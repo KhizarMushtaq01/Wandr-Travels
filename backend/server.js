@@ -86,7 +86,7 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Wandr Server running on port ${PORT}`);
-  console.log(`📧 Email: ${process.env.EMAIL_USER}`);
+  console.log(`📧 Email from: ${process.env.EMAIL_FROM}`);
   console.log(`🌍 Client URL: ${process.env.CLIENT_URL}`);
 });
 

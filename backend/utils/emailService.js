@@ -1,16 +1,6 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-};
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const emailStyles = `
   <style>
@@ -49,16 +39,17 @@ const emailStyles = `
 `;
 
 const sendEmail = async ({ to, subject, html }) => {
-  const transporter = createTransporter();
-  const info = await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'Wandr Travel <noreply@wandr.travel>',
+  const { data, error } = await resend.emails.send({
+    from: process.env.EMAIL_FROM || 'Wandr Travel <noreply@albreeza.com>',
     to,
     subject,
     html,
   });
-  console.log(`📧 Email sent: ${info.messageId} → ${to}`);
-  return info;
+  if (error) throw new Error(error.message || 'Resend send failed');
+  console.log(`📧 Email sent: ${data.id} → ${to}`);
+  return data;
 };
+exports.sendEmail = sendEmail;
 
 const wrapEmail = (content) => `
 <!DOCTYPE html>
@@ -383,4 +374,48 @@ exports.sendAdminUserAlertEmail = async (adminEmail, message, details) => {
     </div>
   `);
   return sendEmail({ to: adminEmail, subject: '🛡️ Wandr Admin Alert', html });
+};
+
+exports.sendContactReceivedEmail = async (contactMsg) => {
+  const html = wrapEmail(`
+    <div class="hero-banner">
+      <div class="hero-icon">📬</div>
+      <div class="hero-title">We Got Your Message!</div>
+    </div>
+    <div class="body">
+      <div class="greeting">Hi ${contactMsg.name},</div>
+      <div class="message">Thanks for reaching out to Wandr Travel. We've received your message and our team will get back to you as soon as possible.</div>
+      <div class="info-card">
+        <div class="info-row"><span class="info-label">Subject</span><span class="info-value">${contactMsg.subject}</span></div>
+        <div class="info-row"><span class="info-label">Submitted</span><span class="info-value">${new Date().toLocaleString()}</span></div>
+      </div>
+      <div class="message">In the meantime, feel free to keep exploring Wandr and planning your next adventure.</div>
+    </div>
+  `);
+  return exports.sendEmail({ to: contactMsg.email, subject: '📬 We Received Your Message — Wandr Travel', html });
+};
+
+exports.sendNewContactMessageAdminEmail = async (adminEmail, contactMsg) => {
+  const html = wrapEmail(`
+    <div class="hero-banner">
+      <div class="hero-icon">✉️</div>
+      <div class="hero-title">New Contact Message</div>
+    </div>
+    <div class="body">
+      <div class="greeting">Admin Notification</div>
+      <div class="message">A new message was submitted through the Contact form.</div>
+      <div class="info-card">
+        <div class="info-row"><span class="info-label">From</span><span class="info-value">${contactMsg.name}</span></div>
+        <div class="info-row"><span class="info-label">Email</span><span class="info-value">${contactMsg.email}</span></div>
+        <div class="info-row"><span class="info-label">Subject</span><span class="info-value">${contactMsg.subject}</span></div>
+      </div>
+      <div class="info-card">
+        <div style="color:#c8d6e8;font-size:14px;white-space:pre-wrap;">${contactMsg.message}</div>
+      </div>
+      <div style="text-align:center;">
+        <a href="${process.env.CLIENT_URL}/admin/contact" class="cta-btn">View in Admin Inbox</a>
+      </div>
+    </div>
+  `);
+  return exports.sendEmail({ to: adminEmail, subject: `✉️ New Contact Message: ${contactMsg.subject}`, html });
 };

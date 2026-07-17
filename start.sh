@@ -5,7 +5,7 @@ echo "  ────────────────────────
 echo ""
 echo "  Make sure:"
 echo "  1. MongoDB is running (local or Atlas)"  
-echo "  2. backend/.env is configured (Gmail SMTP + MongoDB URI)"
+echo "  2. backend/.env is configured (Resend API key + MongoDB URI)"
 echo ""
 echo "  Starting servers..."
 echo ""
