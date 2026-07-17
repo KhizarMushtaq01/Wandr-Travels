@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { SOCIAL_ICONS } from '../utils/icons'
+import { FaMap, FaCalendarCheck, FaSackDollar, FaBoxesPacking, FaBookOpen, FaUsers, FaBell, FaGlobe, FaStar, FaPlay, FaCheck, FaHeart } from 'react-icons/fa6'
 
 const HERO_IMAGES = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
@@ -50,14 +52,14 @@ const STORIES = [
 ]
 
 const FEATURES = [
-  { icon:'🗺️', title:'Day-by-Day Itinerary',  desc:'Drag-and-drop trip building with smart route optimization.' },
-  { icon:'📅', title:'Booking Manager',        desc:'Centralize every reservation — flights, hotels, tours and more.' },
-  { icon:'💰', title:'Budget Tracker',         desc:'Multi-currency expense tracking with group split.' },
-  { icon:'🎒', title:'Packing Lists',          desc:'Smart templates, family assignment, real-time sync.' },
-  { icon:'📔', title:'Travel Journal',         desc:'Photo stories, mood logs, and community sharing.' },
-  { icon:'👥', title:'Social Feed',            desc:'Follow fellow adventurers and discover their routes.' },
-  { icon:'🔔', title:'Live Notifications',     desc:'Booking alerts, trip reminders, collaboration updates.' },
-  { icon:'🌍', title:'Scratch Map',            desc:'Visual map of every country you have conquered.' },
+  { icon:<FaMap className="w-8 h-8" />, title:'Day-by-Day Itinerary',  desc:'Drag-and-drop trip building with smart route optimization.' },
+  { icon:<FaCalendarCheck className="w-8 h-8" />, title:'Booking Manager',        desc:'Centralize every reservation — flights, hotels, tours and more.' },
+  { icon:<FaSackDollar className="w-8 h-8" />, title:'Budget Tracker',         desc:'Multi-currency expense tracking with group split.' },
+  { icon:<FaBoxesPacking className="w-8 h-8" />, title:'Packing Lists',          desc:'Smart templates, family assignment, real-time sync.' },
+  { icon:<FaBookOpen className="w-8 h-8" />, title:'Travel Journal',         desc:'Photo stories, mood logs, and community sharing.' },
+  { icon:<FaUsers className="w-8 h-8" />, title:'Social Feed',            desc:'Follow fellow adventurers and discover their routes.' },
+  { icon:<FaBell className="w-8 h-8" />, title:'Live Notifications',     desc:'Booking alerts, trip reminders, collaboration updates.' },
+  { icon:<FaGlobe className="w-8 h-8" />, title:'Scratch Map',            desc:'Visual map of every country you have conquered.' },
 ]
 
 const TESTIMONIALS = [
@@ -70,7 +72,7 @@ const STATS = [
   { n:'180+', label:'Countries Mapped' },
   { n:'50K+', label:'Adventurers' },
   { n:'200K+', label:'Trips Planned' },
-  { n:'4.9★', label:'App Rating' },
+  { n:'4.9', label:'App Rating', suffix:<FaStar className="inline w-5 h-5 ml-1 text-w-accent" /> },
 ]
 
 function FadeSection({ children, delay = 0, className = '' }) {
@@ -148,7 +150,7 @@ function HeroSection() {
       <motion.div className="relative z-10 text-center max-w-5xl mx-auto px-4" style={{ opacity }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
           className="inline-flex items-center gap-2 bg-w-accent/15 backdrop-blur-sm border border-w-accent/30 text-w-accent text-xs font-medium px-4 py-2 rounded-full mb-8 tracking-wider uppercase">
-          ✦ The All-In-One Adventure Planner
+          <FaStar className="inline w-3 h-3 mr-1" /> The All-In-One Adventure Planner
         </motion.div>
 
         <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.9 }}
@@ -168,7 +170,9 @@ function HeroSection() {
             Begin Your Adventure →
           </Link>
           <Link to="/explore" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm px-6 py-4 border border-white/20 rounded-xl hover:border-white/40 hover:bg-white/5 backdrop-blur-sm">
-            <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">▶</span>
+            <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">
+              <FaPlay className="w-3 h-3" />
+            </span>
             Explore Community Trips
           </Link>
         </motion.div>
@@ -188,9 +192,9 @@ function StatsBar() {
   return (
     <FadeSection className="border-y border-w-border/40 bg-w-navy/60 backdrop-blur-sm">
       <div className="max-w-5xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
-        {STATS.map(({ n, label }) => (
+        {STATS.map(({ n, label, suffix }) => (
           <div key={label} className="text-center">
-            <div className="font-display text-4xl font-light text-gradient mb-1">{n}</div>
+            <div className="font-display text-4xl font-light text-gradient mb-1">{n}{suffix && <>{suffix}</>}</div>
             <div className="text-w-muted text-sm tracking-wide">{label}</div>
           </div>
         ))}
@@ -303,7 +307,7 @@ function FeaturesGrid() {
         {FEATURES.map(({ icon, title, desc }, i) => (
           <FadeSection key={title} delay={i * 0.06}>
             <div className="group card-hover h-full">
-              <div className="text-3xl mb-5 transform group-hover:scale-110 transition-transform duration-300">{icon}</div>
+              <div className="text-w-accent mb-5 transform group-hover:scale-110 transition-transform duration-300">{icon}</div>
               <h3 className="text-white font-semibold mb-2.5 text-sm">{title}</h3>
               <p className="text-w-muted text-sm leading-relaxed">{desc}</p>
             </div>
@@ -329,7 +333,7 @@ function TestimonialsSection() {
               <div className="card h-full flex flex-col justify-between border border-w-border hover:border-w-accent/25 transition-all duration-300 group">
                 <div>
                   <div className="flex gap-0.5 mb-6">
-                    {[...Array(5)].map((_, j) => <span key={j} className="text-w-accent text-sm">★</span>)}
+                    {[...Array(5)].map((_, j) => <FaStar key={j} className="text-w-accent w-3.5 h-3.5" />)}
                   </div>
                   <p className="text-w-text text-base leading-relaxed italic mb-8">"{t.quote}"</p>
                 </div>
@@ -376,7 +380,7 @@ function PricingSection() {
                   </div>
                 </div>
                 <ul className="space-y-3 flex-1 mb-8">
-                  {p.features.map(f => <li key={f} className="flex items-center gap-2.5 text-sm text-w-text"><span className="text-w-accent text-xs">✓</span>{f}</li>)}
+                  {p.features.map(f => <li key={f} className="flex items-center gap-2.5 text-sm text-w-text"><FaCheck className="text-w-accent w-3 h-3" />{f}</li>)}
                 </ul>
                 <Link to="/register" className={p.highlight ? 'btn-primary w-full justify-center py-3.5' : 'btn-outline w-full justify-center py-3.5'}>{p.cta}</Link>
               </div>
@@ -427,7 +431,14 @@ function Footer() {
             </div>
             <p className="text-w-muted text-sm leading-relaxed max-w-xs">Your all-in-one adventure travel planner. Plan, book, track, and relive every journey — all in one place.</p>
             <div className="flex gap-3 mt-6">
-              {['𝕏','in','ig','yt'].map(s => <a key={s} href="#" className="w-8 h-8 rounded-lg bg-w-border/50 border border-w-border flex items-center justify-center text-w-muted hover:text-w-accent hover:border-w-accent/40 transition-all text-xs font-bold">{s}</a>)}
+              {[
+                { key: 'x', icon: SOCIAL_ICONS.x },
+                { key: 'linkedin', icon: SOCIAL_ICONS.linkedin },
+                { key: 'instagram', icon: SOCIAL_ICONS.instagram },
+                { key: 'youtube', icon: SOCIAL_ICONS.youtube },
+              ].map(({ key, icon }) => (
+                <a key={key} href="#" className="w-8 h-8 rounded-lg bg-w-border/50 border border-w-border flex items-center justify-center text-w-muted hover:text-w-accent hover:border-w-accent/40 transition-all">{icon}</a>
+              ))}
             </div>
           </div>
           {[
@@ -446,7 +457,7 @@ function Footer() {
         </div>
         <div className="divider pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-w-muted/60">© {new Date().getFullYear()} Wandr Travel Technologies. All rights reserved.</p>
-          <p className="text-xs text-w-muted/60">Made with ♥ for adventurers everywhere</p>
+          <p className="text-xs text-w-muted/60 inline-flex items-center gap-1">Made with <FaHeart className="w-3 h-3 text-red-400" /> for adventurers everywhere</p>
         </div>
       </div>
     </footer>
