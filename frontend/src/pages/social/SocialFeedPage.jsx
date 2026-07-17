@@ -103,7 +103,7 @@ export default function SocialFeedPage() {
                       <Link to={'/profile/' + user._id} className="text-white text-sm font-medium hover:text-wandr-accent transition-colors">
                         {user.firstName} {user.lastName}
                       </Link>
-                      {user.location && <div className="text-xs text-wandr-muted truncate inline-flex items-center gap-1"><FaLocationDot className="w-3 h-3" /> {user.location}</div>}
+                      {user.location && <div className="text-xs text-wandr-muted inline-flex items-center gap-1 min-w-0"><FaLocationDot className="w-3 h-3 flex-shrink-0" /> <span className="truncate min-w-0">{user.location}</span></div>}
                     </div>
                     <button onClick={() => handleFollow(user._id)} className="flex items-center gap-1 text-xs text-wandr-accent border border-wandr-accent/30 hover:bg-wandr-accent/10 px-2.5 py-1.5 rounded-lg transition-all flex-shrink-0">
                       <UserPlusIcon className="w-3.5 h-3.5" /> Follow

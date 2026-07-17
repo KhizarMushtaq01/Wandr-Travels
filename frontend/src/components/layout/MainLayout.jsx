@@ -55,7 +55,7 @@ function Sidebar({ onClose }) {
           )}
           <div className="flex-1 min-w-0">
             <div className="text-sm font-medium text-white truncate">{user?.firstName} {user?.lastName}</div>
-            <div className="text-xs text-w-muted truncate capitalize flex items-center gap-1">{user?.subscriptionPlan === 'pro' ? <><FaStar className="w-3 h-3" /> Pro</> : user?.subscriptionPlan === 'premium' ? <><FaGem className="w-3 h-3" /> Premium</> : 'Explorer'}</div>
+            <div className="text-xs text-w-muted capitalize flex items-center gap-1 min-w-0">{user?.subscriptionPlan === 'pro' ? <><FaStar className="w-3 h-3 flex-shrink-0" /> <span className="truncate min-w-0">Pro</span></> : user?.subscriptionPlan === 'premium' ? <><FaGem className="w-3 h-3 flex-shrink-0" /> <span className="truncate min-w-0">Premium</span></> : <span className="truncate min-w-0">Explorer</span>}</div>
           </div>
         </NavLink>
       </div>

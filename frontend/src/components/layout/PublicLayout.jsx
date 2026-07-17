@@ -51,12 +51,12 @@ function PublicFooter() {
           </div>
           <div className="flex gap-3">
             {[
-              { key: 'x', icon: SOCIAL_ICONS.x },
-              { key: 'linkedin', icon: SOCIAL_ICONS.linkedin },
-              { key: 'instagram', icon: SOCIAL_ICONS.instagram },
-              { key: 'youtube', icon: SOCIAL_ICONS.youtube },
-            ].map(({ key, icon }) => (
-              <a key={key} href="#" className="w-8 h-8 rounded-lg bg-w-border/50 border border-w-border flex items-center justify-center text-w-muted hover:text-w-accent hover:border-w-accent/40 transition-all">{icon}</a>
+              { key: 'x', label: 'X (Twitter)', icon: SOCIAL_ICONS.x },
+              { key: 'linkedin', label: 'LinkedIn', icon: SOCIAL_ICONS.linkedin },
+              { key: 'instagram', label: 'Instagram', icon: SOCIAL_ICONS.instagram },
+              { key: 'youtube', label: 'YouTube', icon: SOCIAL_ICONS.youtube },
+            ].map(({ key, label, icon }) => (
+              <a key={key} href="#" aria-label={label} className="w-8 h-8 rounded-lg bg-w-border/50 border border-w-border flex items-center justify-center text-w-muted hover:text-w-accent hover:border-w-accent/40 transition-all">{icon}</a>
             ))}
           </div>
           <p className="text-xs text-w-muted/50">Built for adventurers worldwide</p>
