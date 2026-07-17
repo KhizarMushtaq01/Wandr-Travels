@@ -3,14 +3,26 @@ import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { SparklesIcon, MagnifyingGlassIcon, HeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+import useAuthStore from '../../context/authStore';
 
 export default function DiscoverPage() {
+  const { user, setUser } = useAuthStore();
   const [trips, setTrips] = useState([]);
   const [featured, setFeatured] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('trending');
+  const saved = user?.savedDestinations || [];
+
+  const toggleWishlist = async (name) => {
+    try {
+      const res = await api.post('/users/me/wishlist', { destination: name });
+      setUser({ ...user, savedDestinations: res.data.savedDestinations });
+      toast.success(res.data.saved ? 'Saved to wishlist' : 'Removed from wishlist');
+    } catch (e) {}
+  };
 
   useEffect(() => {
     Promise.all([
@@ -61,14 +73,22 @@ export default function DiscoverPage() {
         <div>
           <h2 className="font-display text-xl text-white font-semibold mb-4">Popular Destinations</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-            {destinations.slice(0, 12).map((dest, i) => (
-              <button key={i} onClick={() => { setSearch(dest._id); handleSearch({ preventDefault: () => {} }); }}
-                className="p-3 rounded-xl bg-wandr-blue/30 border border-wandr-border hover:border-wandr-accent/30 hover:bg-wandr-blue/50 transition-all text-center">
-                <div className="text-white font-medium text-sm truncate">{dest._id}</div>
-                {dest.country && <div className="text-wandr-muted text-xs truncate">{dest.country}</div>}
-                <div className="text-wandr-muted text-xs mt-1">{dest.count} trips</div>
-              </button>
-            ))}
+            {destinations.slice(0, 12).map((dest, i) => {
+              const isSaved = saved.includes(dest.name);
+              return (
+                <div key={i} onClick={() => { setSearch(dest.name); handleSearch({ preventDefault: () => {} }); }}
+                  className="relative p-3 rounded-xl bg-wandr-blue/30 border border-wandr-border hover:border-wandr-accent/30 hover:bg-wandr-blue/50 transition-all text-center cursor-pointer">
+                  <button onClick={(e) => { e.stopPropagation(); toggleWishlist(dest.name); }}
+                    className="absolute top-1.5 right-1.5 p-1 rounded-full bg-wandr-dark/60 hover:bg-wandr-dark transition-colors"
+                    aria-label={isSaved ? 'Remove from wishlist' : 'Save to wishlist'}>
+                    {isSaved ? <HeartSolid className="w-3.5 h-3.5 text-red-400" /> : <HeartIcon className="w-3.5 h-3.5 text-white" />}
+                  </button>
+                  <div className="text-white font-medium text-sm truncate pr-4">{dest.name}</div>
+                  {dest.country && <div className="text-wandr-muted text-xs truncate">{dest.country}</div>}
+                  {dest.rating && <div className="text-wandr-muted text-xs mt-1">⭐ {dest.rating}</div>}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
