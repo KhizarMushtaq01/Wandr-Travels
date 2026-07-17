@@ -34,6 +34,7 @@ import BookingDetailPage from './pages/bookings/BookingDetailPage'
 import BudgetPage       from './pages/budget/BudgetPage'
 import PackingPage      from './pages/packing/PackingPage'
 import DiscoverPage     from './pages/discover/DiscoverPage'
+import WishlistPage     from './pages/wishlist/WishlistPage'
 import JournalPage      from './pages/journal/JournalPage'
 import JournalEntryPage from './pages/journal/JournalEntryPage'
 import SocialFeedPage   from './pages/social/SocialFeedPage'
@@ -91,6 +92,7 @@ export default function App() {
           <Route path="/budget" element={<BudgetPage />} />
           <Route path="/packing" element={<PackingPage />} />
           <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/journal" element={<JournalPage />} />
           <Route path="/journal/:id" element={<JournalEntryPage />} />
           <Route path="/social" element={<SocialFeedPage />} />

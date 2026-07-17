@@ -12,6 +12,7 @@ const NAV = [
   { to:'/budget',      icon:'💰', label:'Budget'      },
   { to:'/packing',     icon:'🎒', label:'Packing'     },
   { to:'/discover',    icon:'✨', label:'Discover'    },
+  { to:'/wishlist',    icon:'❤️', label:'Wishlist'    },
   { to:'/journal',     icon:'📔', label:'Journal'     },
   { to:'/social',      icon:'👥', label:'Social Feed' },
 ]
