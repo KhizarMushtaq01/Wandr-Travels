@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import { UserPlusIcon, MapIcon } from '@heroicons/react/24/outline';
+import { FaHeart, FaEye, FaStopwatch, FaLocationDot } from 'react-icons/fa6';
 import { format } from 'date-fns';
 
 export default function SocialFeedPage() {
@@ -72,9 +73,9 @@ export default function SocialFeedPage() {
                 <p className="text-sm text-wandr-muted mb-3">{trip.destinations?.map(d => d.name).join(' → ') || trip.description || ''}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex gap-4 text-xs text-wandr-muted">
-                    <span>❤️ {trip.likes?.length || 0}</span>
-                    <span>👁️ {trip.views || 0}</span>
-                    {trip.duration && <span>⏱️ {trip.duration}d</span>}
+                    <span className="inline-flex items-center gap-1"><FaHeart className="w-3 h-3" /> {trip.likes?.length || 0}</span>
+                    <span className="inline-flex items-center gap-1"><FaEye className="w-3 h-3" /> {trip.views || 0}</span>
+                    {trip.duration && <span className="inline-flex items-center gap-1"><FaStopwatch className="w-3 h-3" /> {trip.duration}d</span>}
                   </div>
                   <Link to={'/trips/' + trip._id} className="btn-ghost text-xs px-3 py-1.5">View Trip</Link>
                 </div>
@@ -102,7 +103,7 @@ export default function SocialFeedPage() {
                       <Link to={'/profile/' + user._id} className="text-white text-sm font-medium hover:text-wandr-accent transition-colors">
                         {user.firstName} {user.lastName}
                       </Link>
-                      {user.location && <div className="text-xs text-wandr-muted truncate">📍 {user.location}</div>}
+                      {user.location && <div className="text-xs text-wandr-muted truncate inline-flex items-center gap-1"><FaLocationDot className="w-3 h-3" /> {user.location}</div>}
                     </div>
                     <button onClick={() => handleFollow(user._id)} className="flex items-center gap-1 text-xs text-wandr-accent border border-wandr-accent/30 hover:bg-wandr-accent/10 px-2.5 py-1.5 rounded-lg transition-all flex-shrink-0">
                       <UserPlusIcon className="w-3.5 h-3.5" /> Follow
