@@ -5,9 +5,10 @@ import { PlusIcon, TrashIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import { BOOKING_TYPE_ICONS } from '../../utils/icons';
+import { FaCircleCheck, FaLocationDot, FaCalendarDays } from 'react-icons/fa6';
 
 const bookingTypes = ['flight', 'hotel', 'activity', 'car', 'train', 'ferry', 'tour', 'other'];
-const typeIcons = { flight: '✈️', hotel: '🏨', activity: '🎯', car: '🚗', train: '🚂', ferry: '⛴️', tour: '🗺️', other: '📌' };
 const statusColors = { pending: 'badge-blue', confirmed: 'badge-green', cancelled: 'badge-red', completed: 'text-gray-400 bg-gray-500/10 border-gray-500/20 badge' };
 
 export function BookingsPage() {
@@ -24,7 +25,7 @@ export function BookingsPage() {
     e.preventDefault();
     try {
       await api.post('/bookings', form);
-      toast.success('Booking added! ✅');
+      toast.success(<>Booking added! <FaCircleCheck className="inline w-4 h-4 ml-1" /></>);
       setShowAdd(false);
       fetch();
     } catch (e) {}
@@ -56,7 +57,7 @@ export function BookingsPage() {
       <div className="flex gap-2 flex-wrap">
         {['all', 'pending', 'confirmed', 'cancelled', ...bookingTypes].map(f => (
           <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1.5 rounded-xl text-xs font-medium capitalize transition-all ${filter === f ? 'bg-wandr-accent/15 text-wandr-accent border border-wandr-accent/30' : 'text-wandr-muted border border-wandr-border hover:text-white'}`}>
-            {typeIcons[f] || ''} {f}
+            {BOOKING_TYPE_ICONS[f] || ''} {f}
           </button>
         ))}
       </div>
@@ -72,15 +73,15 @@ export function BookingsPage() {
         <div className="space-y-3">
           {filtered.map(b => (
             <div key={b._id} className="card-hover flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-wandr-blue flex items-center justify-center text-2xl flex-shrink-0">{typeIcons[b.type]}</div>
+              <div className="w-12 h-12 rounded-xl bg-wandr-blue flex items-center justify-center text-2xl flex-shrink-0">{BOOKING_TYPE_ICONS[b.type]}</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-semibold text-white">{b.name}</span>
                   <span className={`${statusColors[b.status]} text-xs`}>{b.status}</span>
                 </div>
                 <div className="flex gap-3 text-xs text-wandr-muted mt-1 flex-wrap">
-                  {b.destination && <span>📍 {b.destination}</span>}
-                  {b.checkIn && <span>📅 {format(new Date(b.checkIn), 'MMM d, yyyy')}</span>}
+                  {b.destination && <span className="inline-flex items-center gap-1"><FaLocationDot className="w-3 h-3" /> {b.destination}</span>}
+                  {b.checkIn && <span className="inline-flex items-center gap-1"><FaCalendarDays className="w-3 h-3" /> {format(new Date(b.checkIn), 'MMM d, yyyy')}</span>}
                   {b.checkOut && <span>→ {format(new Date(b.checkOut), 'MMM d, yyyy')}</span>}
                   {b.bookingReference && <span>Ref: {b.bookingReference}</span>}
                   {b.totalAmount && <span className="text-wandr-accent font-medium">{b.currency} {b.totalAmount}</span>}
@@ -103,7 +104,7 @@ export function BookingsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Type</label>
                   <select className="input-field" value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
-                    {bookingTypes.map(t => <option key={t} value={t}>{typeIcons[t]} {t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
+                    {bookingTypes.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
                   </select>
                 </div>
                 <div><label className="label">Status</label>
@@ -151,7 +152,7 @@ export function BookingDetailPage() {
   return (
     <div className="max-w-2xl mx-auto animate-fade-in">
       <div className="page-header">
-        <h1 className="page-title">{typeIcons[booking.type]} {booking.name}</h1>
+        <h1 className="page-title">{BOOKING_TYPE_ICONS[booking.type]} {booking.name}</h1>
       </div>
       <div className="card space-y-4">
         {[

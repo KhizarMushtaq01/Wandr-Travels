@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
 import { format } from 'date-fns';
+import { BOOKING_TYPE_ICONS } from '../../utils/icons';
 
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState([]);
@@ -11,7 +12,6 @@ export default function AdminBookingsPage() {
     api.get('/bookings/all').then(r => { setBookings(r.data.bookings || []); setTotal(r.data.total || 0); setLoading(false); }).catch(() => setLoading(false));
   }, []);
 
-  const typeIcons = { flight: '✈️', hotel: '🏨', activity: '🎯', car: '🚗', train: '🚂', ferry: '⛴️', tour: '🗺️', other: '📌' };
   const statusColors = { pending: 'badge-blue', confirmed: 'badge-green', cancelled: 'badge-red', completed: 'text-gray-400 bg-gray-500/10 border-gray-500/20 badge' };
 
   if (loading) return <div className="flex justify-center py-20"><div className="animate-spin w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full" /></div>;
@@ -35,7 +35,7 @@ export default function AdminBookingsPage() {
               <tr key={b._id} className="table-row">
                 <td className="table-cell">
                   <div className="flex items-center gap-3">
-                    <span className="text-xl">{typeIcons[b.type] || '📌'}</span>
+                    <span className="text-xl">{BOOKING_TYPE_ICONS[b.type] || BOOKING_TYPE_ICONS.other}</span>
                     <div>
                       <div className="text-white font-medium text-sm">{b.name}</div>
                       <div className="text-wandr-muted text-xs capitalize">{b.type}{b.destination && ' · ' + b.destination}</div>
