@@ -156,7 +156,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mt-5 pt-5 border-t border-wandr-border">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-5 border-t border-wandr-border">
           {[
             { label: 'Followers', value: profile.followers?.length || 0 },
             { label: 'Following', value: profile.following?.length || 0 },
