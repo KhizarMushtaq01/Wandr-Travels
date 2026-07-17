@@ -35,6 +35,13 @@ exports.getDashboardStats = async (req, res, next) => {
       { $sort: { '_id.year': 1, '_id.month': 1 } }
     ]);
 
+    // Monthly revenue (last 6 months)
+    const monthlyRevenue = await Booking.aggregate([
+      { $match: { createdAt: { $gte: sixMonthsAgo }, status: 'confirmed' } },
+      { $group: { _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } }, total: { $sum: '$totalAmount' } } },
+      { $sort: { '_id.year': 1, '_id.month': 1 } }
+    ]);
+
     // Recent activity
     const recentUsers = await User.find().sort('-createdAt').limit(5).select('firstName lastName email avatar createdAt role');
     const recentTrips = await Trip.find().sort('-createdAt').limit(5).populate('owner', 'firstName lastName');
@@ -58,6 +65,7 @@ exports.getDashboardStats = async (req, res, next) => {
         bookings: { total: totalBookings, confirmed: confirmedBookings, pending: pendingBookings },
         revenue: { total: totalRevenue[0]?.total || 0 },
         monthlySignups,
+        monthlyRevenue,
         roleStats,
         bookingTypeStats
       },
