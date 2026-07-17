@@ -682,6 +682,7 @@ html/
 *.Rcheck/
 *.pdf
 *.html
+!index.html
 *.tex
 *.log
 *.aux

@@ -68,12 +68,12 @@ export default function JournalPage() {
       )}
       {showAdd && (
         <div className="modal-overlay" onClick={() => setShowAdd(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">New Journal Entry</h3>
             <form onSubmit={handleAdd} className="space-y-4">
               <div><label className="label">Title *</label><input className="input-field" placeholder="A Perfect Day in Kyoto" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required /></div>
               <div><label className="label">Story *</label><textarea className="input-field resize-none min-h-[120px]" placeholder="Write about your experience..." value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} required /></div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Location</label><input className="input-field" placeholder="Kyoto, Japan" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} /></div>
                 <div><label className="label">Date</label><input type="date" className="input-field" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></div>
               </div>

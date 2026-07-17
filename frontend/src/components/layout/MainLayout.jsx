@@ -3,6 +3,7 @@ import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import useAuthStore from '../../context/authStore'
 import NotificationBell from '../common/NotificationBell'
+import GlobalSearch from '../common/GlobalSearch'
 
 const NAV = [
   { to:'/dashboard',   icon:'🏠', label:'Dashboard'   },
@@ -11,6 +12,7 @@ const NAV = [
   { to:'/budget',      icon:'💰', label:'Budget'      },
   { to:'/packing',     icon:'🎒', label:'Packing'     },
   { to:'/discover',    icon:'✨', label:'Discover'    },
+  { to:'/wishlist',    icon:'❤️', label:'Wishlist'    },
   { to:'/journal',     icon:'📔', label:'Journal'     },
   { to:'/social',      icon:'👥', label:'Social Feed' },
 ]
@@ -126,6 +128,7 @@ export default function MainLayout() {
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
           <div className="flex-1" />
+          <GlobalSearch />
           <NotificationBell />
           <div className="w-px h-5 bg-w-border" />
           <NavLink to="/profile">

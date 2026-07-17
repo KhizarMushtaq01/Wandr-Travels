@@ -85,10 +85,10 @@ export default function BudgetPage() {
       </div>
       {showAdd && (
         <div className="modal-overlay" onClick={() => setShowAdd(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">Log Expense</h3>
             <form onSubmit={handleAdd} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Category</label>
                   <select className="input-field" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>
                     {categories.map(c => <option key={c} value={c}>{catIcons[c]} {c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
@@ -97,7 +97,7 @@ export default function BudgetPage() {
                 <div><label className="label">Date</label><input type="date" className="input-field" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></div>
               </div>
               <div><label className="label">Description *</label><input className="input-field" placeholder="Hotel 3 nights" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required /></div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Amount *</label><input type="number" step="0.01" className="input-field" placeholder="0.00" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} required /></div>
                 <div><label className="label">Currency</label>
                   <select className="input-field" value={form.currency} onChange={e => setForm({ ...form, currency: e.target.value })}>

@@ -173,7 +173,7 @@ export default function PackingPage() {
 
       {showNewList && (
         <div className="modal-overlay" onClick={() => setShowNewList(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">New Packing List</h3>
             <form onSubmit={handleCreateList} className="space-y-4">
               <div><label className="label">List Name *</label><input className="input-field" placeholder="Thailand Trip 2025" value={newListName} onChange={e => setNewListName(e.target.value)} required /></div>
@@ -196,11 +196,11 @@ export default function PackingPage() {
 
       {showAddItem && (
         <div className="modal-overlay" onClick={() => setShowAddItem(false)}>
-          <div className="modal-content p-6" onClick={e => e.stopPropagation()}>
+          <div className="modal p-6" onClick={e => e.stopPropagation()}>
             <h3 className="font-display text-xl text-white font-semibold mb-5">Add Item</h3>
             <form onSubmit={handleAddItem} className="space-y-4">
               <div><label className="label">Item Name *</label><input className="input-field" placeholder="Sunscreen SPF 50" value={newItem.name} onChange={e => setNewItem({ ...newItem, name: e.target.value })} required /></div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Category</label>
                   <select className="input-field" value={newItem.category} onChange={e => setNewItem({ ...newItem, category: e.target.value })}>
                     {defaultCategories.map(c => <option key={c}>{c}</option>)}

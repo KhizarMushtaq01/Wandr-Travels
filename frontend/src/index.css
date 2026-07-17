@@ -80,6 +80,14 @@ body {
   .prose-dark ul { @apply list-disc pl-6 mb-5 space-y-2 text-w-muted; }
   .prose-dark a { @apply text-w-accent hover:text-w-gold underline underline-offset-2; }
   .prose-dark strong { @apply text-white font-semibold; }
+
+  /* ── Dashboard page chrome (pages/* rely on these) ─── */
+  .page-header { @apply mb-8; }
+  .page-title { @apply font-display text-3xl text-white font-semibold; }
+  .page-subtitle { @apply text-w-muted mt-1; }
+  .stat-card { @apply card-hover; }
+  .btn-secondary { @apply btn bg-w-blue/40 border border-w-border text-w-text px-6 py-3 text-sm hover:bg-w-blue/60 hover:border-w-accent/30; }
+  .input-field { @apply input; }
 }
 
 @layer utilities {

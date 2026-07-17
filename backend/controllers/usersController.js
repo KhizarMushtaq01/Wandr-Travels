@@ -10,7 +10,10 @@ exports.getProfile = async (req, res, next) => {
       .populate('followers', 'firstName lastName avatar')
       .populate('following', 'firstName lastName avatar');
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    res.json({ success: true, user: user.toPublicJSON() });
+    const isOwnProfile = !req.params.id || req.params.id === req.user._id.toString();
+    const publicUser = user.toPublicJSON();
+    if (!isOwnProfile) delete publicUser.savedDestinations;
+    res.json({ success: true, user: publicUser });
   } catch (err) { next(err); }
 };
 
@@ -155,5 +158,21 @@ exports.changeUserRole = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(req.params.id, { role: req.body.role }, { new: true });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
     res.json({ success: true, user });
+  } catch (err) { next(err); }
+};
+
+// @desc Toggle a destination in the current user's wishlist
+exports.toggleWishlist = async (req, res, next) => {
+  try {
+    const destination = (req.body.destination || '').trim();
+    if (!destination) {
+      return res.status(400).json({ success: false, message: 'Destination is required' });
+    }
+    const isSaved = req.user.savedDestinations.includes(destination);
+    const update = isSaved
+      ? { $pull: { savedDestinations: destination } }
+      : { $push: { savedDestinations: destination } };
+    const user = await User.findByIdAndUpdate(req.user._id, update, { new: true });
+    res.json({ success: true, saved: !isSaved, savedDestinations: user.savedDestinations });
   } catch (err) { next(err); }
 };

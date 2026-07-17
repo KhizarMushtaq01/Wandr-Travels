@@ -91,6 +91,7 @@ userSchema.methods.toPublicJSON = function() {
     tripsCompleted: this.tripsCompleted,
     followers: this.followers,
     following: this.following,
+    savedDestinations: this.savedDestinations,
     subscriptionPlan: this.subscriptionPlan,
     notifications: this.notifications,
     isEmailVerified: this.isEmailVerified,
