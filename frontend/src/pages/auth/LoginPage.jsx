@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
+import { FaGlobe } from 'react-icons/fa6'
 import useAuthStore from '../../context/authStore'
 import toast from 'react-hot-toast'
 
@@ -16,7 +17,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     const r = await login(form)
-    if (r.success) { toast.success('Welcome back! 🌍'); navigate('/dashboard') }
+    if (r.success) { toast.success(<>Welcome back! <FaGlobe className="inline w-4 h-4 ml-1" /></>); navigate('/dashboard') }
   }
 
   return (

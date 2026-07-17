@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { EyeIcon, EyeSlashIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
+import { FaGlobe } from 'react-icons/fa6'
 import useAuthStore from '../../context/authStore'
 import toast from 'react-hot-toast'
 
@@ -23,7 +24,7 @@ export default function RegisterPage() {
     if (form.password !== form.confirm) { toast.error('Passwords do not match'); return }
     if (form.password.length < 6) { toast.error('Password must be at least 6 characters'); return }
     const r = await register({ firstName: form.firstName, lastName: form.lastName, email: form.email, password: form.password })
-    if (r.success) { toast.success('Welcome to Wandr! Check your email. 🌍'); navigate('/dashboard') }
+    if (r.success) { toast.success(<>Welcome to Wandr! Check your email. <FaGlobe className="inline w-4 h-4 ml-1" /></>); navigate('/dashboard') }
   }
 
   return (

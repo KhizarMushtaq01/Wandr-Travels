@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { FaEnvelopeOpenText } from 'react-icons/fa6'
 import api from '../../utils/api'
 import toast from 'react-hot-toast'
 
@@ -45,7 +46,7 @@ export default function ForgotPasswordPage() {
       <div className="bg-w-navy/80 backdrop-blur-xl border border-w-border rounded-2xl p-8">
         {sent ? (
           <div className="text-center py-4">
-            <div className="text-5xl mb-4">📬</div>
+            <div className="mb-4 flex justify-center"><FaEnvelopeOpenText className="w-10 h-10 text-w-accent" /></div>
             <h3 className="text-white font-semibold text-lg mb-2">Check Your Inbox</h3>
             <p className="text-w-muted text-sm mb-6">We sent a reset link to <strong className="text-white">{email}</strong>. It expires in 1 hour.</p>
             <Link to="/login" className="btn-primary">Back to Sign In</Link>
