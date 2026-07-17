@@ -126,7 +126,7 @@ export default function ProfilePage() {
           {isEditing ? (
             <>
               <div><label className="label">Bio</label><textarea className="input-field resize-none" rows={3} value={form.bio || ''} onChange={e => setForm({ ...form, bio: e.target.value })} /></div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Location</label><input className="input-field" value={form.location || ''} onChange={e => setForm({ ...form, location: e.target.value })} /></div>
                 <div><label className="label">Website</label><input className="input-field" value={form.website || ''} onChange={e => setForm({ ...form, website: e.target.value })} /></div>
               </div>
