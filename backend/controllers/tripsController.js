@@ -1,5 +1,6 @@
 const Trip = require('../models/Trip');
 const emailService = require('../utils/emailService');
+const { logAdminAction } = require('../models/AdminAuditLog');
 
 exports.createTrip = async (req, res, next) => {
   try {
@@ -139,5 +140,52 @@ exports.getPublicTrips = async (req, res, next) => {
       Trip.countDocuments(query)
     ]);
     res.json({ success: true, trips, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Get all trips regardless of visibility (admin)
+exports.getAllTripsAdmin = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const query = {};
+    if (req.query.search) query.name = { $regex: req.query.search, $options: 'i' };
+    if (req.query.status) query.status = req.query.status;
+
+    const [trips, total] = await Promise.all([
+      Trip.find(query).populate('owner', 'firstName lastName email').sort('-createdAt').skip(skip).limit(limit),
+      Trip.countDocuments(query)
+    ]);
+    res.json({ success: true, trips, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Update a trip's isFeatured/isPublic flags, no owner check (admin)
+exports.adminUpdateTrip = async (req, res, next) => {
+  try {
+    const updates = {};
+    if (req.body.isFeatured !== undefined) updates.isFeatured = req.body.isFeatured;
+    if (req.body.isPublic !== undefined) updates.isPublic = req.body.isPublic;
+    const trip = await Trip.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
+    if (!trip) return res.status(404).json({ success: false, message: 'Trip not found' });
+    if (req.body.isFeatured !== undefined) {
+      logAdminAction(req.user._id, trip.isFeatured ? 'feature_trip' : 'unfeature_trip', 'Trip', trip._id, trip.name);
+    }
+    if (req.body.isPublic !== undefined) {
+      logAdminAction(req.user._id, trip.isPublic ? 'publish_trip' : 'unpublish_trip', 'Trip', trip._id, trip.name);
+    }
+    res.json({ success: true, trip });
+  } catch (err) { next(err); }
+};
+
+// @desc Delete a trip, no owner check (admin)
+exports.adminDeleteTrip = async (req, res, next) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+    if (!trip) return res.status(404).json({ success: false, message: 'Trip not found' });
+    await trip.deleteOne();
+    logAdminAction(req.user._id, 'delete_trip', 'Trip', req.params.id, trip.name);
+    res.json({ success: true, message: 'Trip deleted' });
   } catch (err) { next(err); }
 };

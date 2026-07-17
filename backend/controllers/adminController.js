@@ -2,6 +2,8 @@ const User = require('../models/User');
 const Trip = require('../models/Trip');
 const Booking = require('../models/Booking');
 const { Expense, Journal, Notification } = require('../models/Extras');
+const { AdminAuditLog, logAdminAction } = require('../models/AdminAuditLog');
+const ContactMessage = require('../models/ContactMessage');
 
 exports.getDashboardStats = async (req, res, next) => {
   try {
@@ -33,6 +35,13 @@ exports.getDashboardStats = async (req, res, next) => {
       { $sort: { '_id.year': 1, '_id.month': 1 } }
     ]);
 
+    // Monthly revenue (last 6 months)
+    const monthlyRevenue = await Booking.aggregate([
+      { $match: { createdAt: { $gte: sixMonthsAgo }, status: 'confirmed' } },
+      { $group: { _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } }, total: { $sum: '$totalAmount' } } },
+      { $sort: { '_id.year': 1, '_id.month': 1 } }
+    ]);
+
     // Recent activity
     const recentUsers = await User.find().sort('-createdAt').limit(5).select('firstName lastName email avatar createdAt role');
     const recentTrips = await Trip.find().sort('-createdAt').limit(5).populate('owner', 'firstName lastName');
@@ -56,6 +65,7 @@ exports.getDashboardStats = async (req, res, next) => {
         bookings: { total: totalBookings, confirmed: confirmedBookings, pending: pendingBookings },
         revenue: { total: totalRevenue[0]?.total || 0 },
         monthlySignups,
+        monthlyRevenue,
         roleStats,
         bookingTypeStats
       },
@@ -92,6 +102,7 @@ exports.sendBroadcastEmail = async (req, res, next) => {
         sent++;
       } catch (e) {}
     }
+    logAdminAction(req.user._id, 'send_broadcast', 'Broadcast', null, `"${subject}" to ${sent} users (${userRole || 'all'})`);
     res.json({ success: true, message: `Broadcast sent to ${sent} users` });
   } catch (err) { next(err); }
 };
@@ -110,5 +121,81 @@ exports.getSystemHealth = async (req, res, next) => {
         timestamp: new Date()
       }
     });
+  } catch (err) { next(err); }
+};
+
+// @desc Get admin action audit log (admin)
+exports.getAuditLog = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const [logs, total] = await Promise.all([
+      AdminAuditLog.find().populate('admin', 'firstName lastName email').sort('-createdAt').skip(skip).limit(limit),
+      AdminAuditLog.countDocuments()
+    ]);
+    res.json({ success: true, logs, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Get all public journal entries for moderation (admin)
+exports.getAllJournalAdmin = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const query = { isPublic: true };
+
+    const [entries, total] = await Promise.all([
+      Journal.find(query).populate('user', 'firstName lastName email').sort('-date').skip(skip).limit(limit),
+      Journal.countDocuments(query)
+    ]);
+    res.json({ success: true, entries, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Delete any journal entry, no owner check (admin)
+exports.adminDeleteJournal = async (req, res, next) => {
+  try {
+    const entry = await Journal.findById(req.params.id);
+    if (!entry) return res.status(404).json({ success: false, message: 'Journal entry not found' });
+    await entry.deleteOne();
+    logAdminAction(req.user._id, 'delete_journal', 'Journal', req.params.id, entry.title);
+    res.json({ success: true, message: 'Journal entry removed' });
+  } catch (err) { next(err); }
+};
+
+// @desc List contact form submissions (admin)
+exports.getAllContactMessages = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const query = {};
+    if (req.query.status) query.status = req.query.status;
+
+    const [messages, total] = await Promise.all([
+      ContactMessage.find(query).sort('-createdAt').skip(skip).limit(limit),
+      ContactMessage.countDocuments(query)
+    ]);
+    res.json({ success: true, messages, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Update a contact message's status (admin)
+exports.updateContactMessageStatus = async (req, res, next) => {
+  try {
+    const message = await ContactMessage.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true, runValidators: true });
+    if (!message) return res.status(404).json({ success: false, message: 'Message not found' });
+    res.json({ success: true, message });
+  } catch (err) { next(err); }
+};
+
+// @desc Delete a contact message (admin)
+exports.deleteContactMessage = async (req, res, next) => {
+  try {
+    const message = await ContactMessage.findByIdAndDelete(req.params.id);
+    if (!message) return res.status(404).json({ success: false, message: 'Message not found' });
+    res.json({ success: true, message: 'Message deleted' });
   } catch (err) { next(err); }
 };

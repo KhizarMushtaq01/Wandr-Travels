@@ -7,6 +7,7 @@ import {
   FaFaceGrinStars, FaFaceSmile, FaFaceMeh, FaFaceTired, FaFaceAngry,
   FaXTwitter, FaLinkedin, FaInstagram, FaYoutube,
   FaLandmark, FaUtensils, FaPersonHiking, FaBus, FaPills, FaClipboard, FaBagShopping,
+  FaChartPie, FaFlag, FaEnvelopeOpenText,
 } from 'react-icons/fa6';
 
 const ICON = 'w-5 h-5';
@@ -33,6 +34,9 @@ export const ADMIN_NAV_ICONS = {
   users: <FaUsers className={ICON} />,
   trips: <FaMap className={ICON} />,
   bookings: <FaCalendarDays className={ICON} />,
+  reports: <FaChartPie className={ICON} />,
+  journal: <FaFlag className={ICON} />,
+  contact: <FaEnvelopeOpenText className={ICON} />,
   activity: <FaClockRotateLeft className={ICON} />,
   settings: <FaGear className={ICON} />,
   clientView: <FaHouse className={ICON} />,

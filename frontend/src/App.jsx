@@ -45,6 +45,9 @@ import AdminDashboard   from './pages/admin/AdminDashboard'
 import AdminUsersPage   from './pages/admin/AdminUsersPage'
 import AdminTripsPage   from './pages/admin/AdminTripsPage'
 import AdminBookingsPage from './pages/admin/AdminBookingsPage'
+import AdminReportsPage from './pages/admin/AdminReportsPage'
+import AdminJournalPage from './pages/admin/AdminJournalPage'
+import AdminContactPage from './pages/admin/AdminContactPage'
 import AdminActivityPage from './pages/admin/AdminActivityPage'
 import AdminSettingsPage from './pages/admin/AdminSettingsPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -107,6 +110,9 @@ export default function App() {
           <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route path="/admin/trips" element={<AdminTripsPage />} />
           <Route path="/admin/bookings" element={<AdminBookingsPage />} />
+          <Route path="/admin/reports" element={<AdminReportsPage />} />
+          <Route path="/admin/journal" element={<AdminJournalPage />} />
+          <Route path="/admin/contact" element={<AdminContactPage />} />
           <Route path="/admin/activity" element={<AdminActivityPage />} />
           <Route path="/admin/settings" element={<AdminSettingsPage />} />
         </Route>

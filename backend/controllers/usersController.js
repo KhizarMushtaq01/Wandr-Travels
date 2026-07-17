@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const User = require('../models/User');
 const emailService = require('../utils/emailService');
+const { logAdminAction } = require('../models/AdminAuditLog');
 
 // @desc Get user profile
 exports.getProfile = async (req, res, next) => {
@@ -148,6 +149,7 @@ exports.toggleUserStatus = async (req, res, next) => {
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
     user.isActive = !user.isActive;
     await user.save();
+    logAdminAction(req.user._id, user.isActive ? 'activate_user' : 'deactivate_user', 'User', user._id, `${user.firstName} ${user.lastName} (${user.email})`);
     res.json({ success: true, message: `User ${user.isActive ? 'activated' : 'deactivated'}`, user });
   } catch (err) { next(err); }
 };
@@ -157,6 +159,7 @@ exports.changeUserRole = async (req, res, next) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, { role: req.body.role }, { new: true });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    logAdminAction(req.user._id, 'change_role', 'User', user._id, `${user.firstName} ${user.lastName} → ${req.body.role}`);
     res.json({ success: true, user });
   } catch (err) { next(err); }
 };

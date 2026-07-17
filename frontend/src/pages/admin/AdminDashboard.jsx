@@ -47,7 +47,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={UsersIcon} label="Total Users" value={stats.users.total} sub={`${stats.users.active} active · ${stats.users.newToday} today`} trend={stats.users.newThisMonth} />
         <StatCard icon={MapIcon} label="Total Trips" value={stats.trips.total} sub={`${stats.trips.active} active · ${stats.trips.public} public`} color="text-blue-400" />
         <StatCard icon={CalendarIcon} label="Bookings" value={stats.bookings.total} sub={`${stats.bookings.confirmed} confirmed · ${stats.bookings.pending} pending`} color="text-emerald-400" />
