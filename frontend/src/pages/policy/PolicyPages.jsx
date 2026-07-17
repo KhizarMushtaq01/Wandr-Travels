@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
+import api from '../../utils/api'
 import PublicLayout from '../../components/layout/PublicLayout'
 import {
   FaChevronRight, FaCircleInfo, FaLock, FaEnvelope, FaClipboardList, FaCookieBite,
@@ -345,7 +347,16 @@ export function AccessibilityPage() {
 export function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
-  const handleSubmit = (e) => { e.preventDefault(); setSent(true) }
+  const [submitting, setSubmitting] = useState(false)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setSubmitting(true)
+    try {
+      await api.post('/contact', form)
+      setSent(true)
+    } catch (err) {}
+    setSubmitting(false)
+  }
 
   return (
     <PublicLayout title="Contact Us" subtitle="We'd love to hear from you." breadcrumb="Contact">
@@ -361,7 +372,7 @@ export function ContactPage() {
           ) : (
             <form onSubmit={handleSubmit} className="card space-y-5">
               <h2 className="font-display text-xl text-white">Send a Message</h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="label">Your Name</label><input className="input" placeholder="Alex Rivera" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required /></div>
                 <div><label className="label">Email Address</label><input type="email" className="input" placeholder="you@example.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required /></div>
               </div>
@@ -379,7 +390,7 @@ export function ContactPage() {
                 </select>
               </div>
               <div><label className="label">Message</label><textarea className="input resize-none min-h-[140px]" placeholder="Tell us how we can help..." value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} required /></div>
-              <button type="submit" className="btn-primary w-full py-3.5">Send Message <FaPaperPlane className="inline w-4 h-4 ml-1" /></button>
+              <button type="submit" disabled={submitting} className="btn-primary w-full py-3.5 disabled:opacity-60">{submitting ? 'Sending...' : <>Send Message <FaPaperPlane className="inline w-4 h-4 ml-1" /></>}</button>
             </form>
           )}
         </div>
