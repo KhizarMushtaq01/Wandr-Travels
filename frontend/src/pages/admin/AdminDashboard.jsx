@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
 import { UsersIcon, MapIcon, CalendarIcon, CurrencyDollarIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
+import { FaMap, FaClipboard } from 'react-icons/fa6';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
 import { format } from 'date-fns';
 
@@ -110,7 +111,7 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             {(recentTrips || []).map(t => (
               <div key={t._id} className="flex items-center gap-3">
-                <span className="text-xl flex-shrink-0">🗺️</span>
+                <FaMap className="w-4 h-4 flex-shrink-0 text-wandr-accent" />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm text-white font-medium truncate">{t.name}</div>
                   <div className="text-xs text-wandr-muted">{t.owner?.firstName} · {t.status}</div>
@@ -126,7 +127,7 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             {(recentBookings || []).map(b => (
               <div key={b._id} className="flex items-center gap-3">
-                <span className="text-xl flex-shrink-0">📋</span>
+                <FaClipboard className="w-4 h-4 flex-shrink-0 text-wandr-accent" />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm text-white font-medium truncate">{b.name}</div>
                   <div className="text-xs text-wandr-muted">{b.user?.firstName} · {b.type}</div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 import { TrashIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { FaMap, FaStar, FaRegStar, FaHeart, FaEye } from 'react-icons/fa6';
 import { format } from 'date-fns';
 
 export default function AdminTripsPage() {
@@ -24,7 +25,7 @@ export default function AdminTripsPage() {
     try {
       await api.put('/trips/' + trip._id, { isFeatured: !trip.isFeatured });
       setTrips(t => t.map(x => x._id === trip._id ? { ...x, isFeatured: !x.isFeatured } : x));
-      toast.success(trip.isFeatured ? 'Removed from featured' : 'Marked as featured ⭐');
+      toast.success(trip.isFeatured ? 'Removed from featured' : <>Marked as featured <FaStar className="inline w-4 h-4 ml-1" /></>);
     } catch (e) {}
   };
 
@@ -62,12 +63,15 @@ export default function AdminTripsPage() {
               <tr key={trip._id} className="table-row">
                 <td className="table-cell">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-wandr-blue flex items-center justify-center text-sm flex-shrink-0">🗺️</div>
+                    <div className="w-8 h-8 rounded-lg bg-wandr-blue flex items-center justify-center text-sm flex-shrink-0"><FaMap className="w-4 h-4" /></div>
                     <div>
                       <div className="text-white font-medium text-sm">{trip.name}</div>
                       <div className="flex gap-1 mt-0.5">
-                        {trip.isFeatured && <span className="badge-gold text-xs">⭐ Featured</span>}
-                        <span className="text-xs text-wandr-muted">❤️{trip.likes?.length || 0} 👁️{trip.views || 0}</span>
+                        {trip.isFeatured && <span className="badge-gold text-xs inline-flex items-center gap-1"><FaStar className="w-3 h-3" /> Featured</span>}
+                        <span className="text-xs text-wandr-muted inline-flex items-center gap-2">
+                          <span className="inline-flex items-center gap-1"><FaHeart className="w-3 h-3" />{trip.likes?.length || 0}</span>
+                          <span className="inline-flex items-center gap-1"><FaEye className="w-3 h-3" />{trip.views || 0}</span>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -80,7 +84,7 @@ export default function AdminTripsPage() {
                 <td className="table-cell hidden lg:table-cell text-wandr-muted text-sm">{format(new Date(trip.createdAt), 'MMM d, yyyy')}</td>
                 <td className="table-cell text-right">
                   <div className="flex items-center justify-end gap-1">
-                    <button onClick={() => toggleFeatured(trip)} className={`p-1.5 rounded-lg transition-colors text-xs ${trip.isFeatured ? 'text-yellow-400 bg-yellow-400/10' : 'text-wandr-muted hover:text-yellow-400 hover:bg-yellow-400/10'}`} title="Toggle Featured">⭐</button>
+                    <button onClick={() => toggleFeatured(trip)} className={`p-1.5 rounded-lg transition-colors text-xs ${trip.isFeatured ? 'text-yellow-400 bg-yellow-400/10' : 'text-wandr-muted hover:text-yellow-400 hover:bg-yellow-400/10'}`} title="Toggle Featured">{trip.isFeatured ? <FaStar className="w-4 h-4" /> : <FaRegStar className="w-4 h-4" />}</button>
                     <button onClick={() => handleDelete(trip._id)} className="p-1.5 rounded-lg text-wandr-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"><TrashIcon className="w-4 h-4" /></button>
                   </div>
                 </td>
