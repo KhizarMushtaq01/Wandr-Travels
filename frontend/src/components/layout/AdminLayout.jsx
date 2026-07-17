@@ -38,7 +38,7 @@ function AdminSidebar({ onClose }) {
           <div><div className="text-sm font-medium text-white">{user?.firstName} {user?.lastName}</div><div className="text-xs text-purple-400 capitalize">{user?.role}</div></div>
         </div>
       </div>
-      <nav className="flex-1 px-3 py-3 space-y-0.5">
+      <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto scrollbar-hide">
         {ADMIN_NAV.map(({ to, icon, label, exact }) => (
           <NavLink key={to} to={to} end={exact} onClick={onClose}
             className={({ isActive }) => isActive
