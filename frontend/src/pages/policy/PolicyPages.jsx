@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PublicLayout from '../../components/layout/PublicLayout'
+import { FaChevronRight, FaCircleInfo } from 'react-icons/fa6'
 
 /* ─── Shared helpers ─────────────────────────────────────────────────── */
 const Section = ({ title, children }) => (
@@ -11,14 +12,14 @@ const Section = ({ title, children }) => (
   </div>
 )
 const P = ({ children }) => <p className="text-w-muted leading-7">{children}</p>
-const Li = ({ children }) => <li className="flex gap-2.5 text-w-muted"><span className="text-w-accent mt-1 flex-shrink-0">›</span><span>{children}</span></li>
+const Li = ({ children }) => <li className="flex gap-2.5 text-w-muted"><FaChevronRight className="text-w-accent mt-1 flex-shrink-0 w-3 h-3" /><span>{children}</span></li>
 const Ul = ({ children }) => <ul className="space-y-2 pl-1">{children}</ul>
 const Strong = ({ children }) => <strong className="text-white font-semibold">{children}</strong>
-const InfoBox = ({ icon = 'ℹ️', children, color = 'blue' }) => {
+const InfoBox = ({ icon = <FaCircleInfo />, children, color = 'blue' }) => {
   const colors = { blue: 'bg-blue-500/5 border-blue-500/20 text-blue-300', gold: 'bg-w-accent/5 border-w-accent/20 text-w-accent', green: 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400' }
   return (
     <div className={`flex gap-3 p-4 rounded-xl border ${colors[color]} text-sm`}>
-      <span className="text-lg flex-shrink-0">{icon}</span>
+      <span className="w-5 h-5 flex-shrink-0 [&>svg]:w-5 [&>svg]:h-5">{icon}</span>
       <span className="leading-relaxed">{children}</span>
     </div>
   )
