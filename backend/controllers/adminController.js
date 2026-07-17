@@ -128,3 +128,30 @@ exports.getAuditLog = async (req, res, next) => {
     res.json({ success: true, logs, total, page, pages: Math.ceil(total / limit) });
   } catch (err) { next(err); }
 };
+
+// @desc Get all public journal entries for moderation (admin)
+exports.getAllJournalAdmin = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const query = { isPublic: true };
+
+    const [entries, total] = await Promise.all([
+      Journal.find(query).populate('user', 'firstName lastName email').sort('-date').skip(skip).limit(limit),
+      Journal.countDocuments(query)
+    ]);
+    res.json({ success: true, entries, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Delete any journal entry, no owner check (admin)
+exports.adminDeleteJournal = async (req, res, next) => {
+  try {
+    const entry = await Journal.findById(req.params.id);
+    if (!entry) return res.status(404).json({ success: false, message: 'Journal entry not found' });
+    await entry.deleteOne();
+    logAdminAction(req.user._id, 'delete_journal', 'Journal', req.params.id, entry.title);
+    res.json({ success: true, message: 'Journal entry removed' });
+  } catch (err) { next(err); }
+};
