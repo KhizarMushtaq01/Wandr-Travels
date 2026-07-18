@@ -4,6 +4,7 @@ const Booking = require('../models/Booking');
 const { Expense, Journal, Notification } = require('../models/Extras');
 const { AdminAuditLog, logAdminAction } = require('../models/AdminAuditLog');
 const ContactMessage = require('../models/ContactMessage');
+const Review = require('../models/Review');
 
 exports.getDashboardStats = async (req, res, next) => {
   try {
@@ -196,5 +197,46 @@ exports.deleteContactMessage = async (req, res, next) => {
     const message = await ContactMessage.findByIdAndDelete(req.params.id);
     if (!message) return res.status(404).json({ success: false, message: 'Message not found' });
     res.json({ success: true, message: 'Message deleted' });
+  } catch (err) { next(err); }
+};
+
+// @desc List reviews for moderation (admin)
+exports.getAllReviews = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const query = {};
+    if (req.query.status) query.status = req.query.status;
+
+    const [reviews, total] = await Promise.all([
+      Review.find(query).sort('-createdAt').skip(skip).limit(limit),
+      Review.countDocuments(query)
+    ]);
+    res.json({ success: true, reviews, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) { next(err); }
+};
+
+// @desc Approve or reject a review (admin)
+exports.updateReviewStatus = async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    if (!['approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ success: false, message: 'Status must be approved or rejected' });
+    }
+    const review = await Review.findByIdAndUpdate(req.params.id, { status }, { new: true, runValidators: true });
+    if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+    logAdminAction(req.user._id, status === 'approved' ? 'approve_review' : 'reject_review', 'Review', review._id, review.fullName);
+    res.json({ success: true, review });
+  } catch (err) { next(err); }
+};
+
+// @desc Delete a review (admin)
+exports.deleteReview = async (req, res, next) => {
+  try {
+    const review = await Review.findByIdAndDelete(req.params.id);
+    if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+    logAdminAction(req.user._id, 'delete_review', 'Review', req.params.id, review.fullName);
+    res.json({ success: true, message: 'Review deleted' });
   } catch (err) { next(err); }
 };
