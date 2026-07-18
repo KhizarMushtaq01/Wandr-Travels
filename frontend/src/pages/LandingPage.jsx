@@ -3,6 +3,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { SOCIAL_ICONS } from '../utils/icons'
 import { FaMap, FaCalendarCheck, FaSackDollar, FaBoxesPacking, FaBookOpen, FaUsers, FaBell, FaGlobe, FaStar, FaPlay, FaCheck, FaHeart } from 'react-icons/fa6'
+import useAuthStore from '../context/authStore'
+import api from '../utils/api'
+import ReviewFormModal from '../components/reviews/ReviewFormModal'
+import SignInPromptModal from '../components/reviews/SignInPromptModal'
 
 const HERO_IMAGES = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
@@ -60,12 +64,6 @@ const FEATURES = [
   { icon:<FaUsers className="w-8 h-8" />, title:'Social Feed',            desc:'Follow fellow adventurers and discover their routes.' },
   { icon:<FaBell className="w-8 h-8" />, title:'Live Notifications',     desc:'Booking alerts, trip reminders, collaboration updates.' },
   { icon:<FaGlobe className="w-8 h-8" />, title:'Scratch Map',            desc:'Visual map of every country you have conquered.' },
-]
-
-const TESTIMONIALS = [
-  { quote:'Wandr is the only travel app I actually keep using. It turned planning from a chore into a joy.', name:'Elena K.', role:'Digital Nomad, 47 countries', img:'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=80&q=80' },
-  { quote:'We planned our entire Patagonia trek — 18 days — without a single spreadsheet. Pure magic.', name:'Marcus & Jo', role:'Adventure couple', img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80' },
-  { quote:'The journal feature alone is worth it. I have detailed memories of every trip since 2023.', name:'Yuki T.', role:'Travel blogger', img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&q=80' },
 ]
 
 const STATS = [
@@ -319,6 +317,20 @@ function FeaturesGrid() {
 }
 
 function TestimonialsSection() {
+  const [reviews, setReviews] = useState([])
+  const [showForm, setShowForm] = useState(false)
+  const [showSignIn, setShowSignIn] = useState(false)
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+
+  useEffect(() => {
+    api.get('/reviews/approved').then(r => setReviews(r.data.reviews || [])).catch(() => {})
+  }, [])
+
+  const handleWriteReview = () => {
+    if (isAuthenticated()) setShowForm(true)
+    else setShowSignIn(true)
+  }
+
   return (
     <section className="py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
@@ -327,28 +339,37 @@ function TestimonialsSection() {
           <h2 className="heading-lg text-white">Real adventures. Real love.</h2>
         </FadeSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t, i) => (
-            <FadeSection key={t.name} delay={i * 0.1}>
-              <div className="card h-full flex flex-col justify-between border border-w-border hover:border-w-accent/25 transition-all duration-300 group">
-                <div>
-                  <div className="flex gap-0.5 mb-6">
-                    {[...Array(5)].map((_, j) => <FaStar key={j} className="text-w-accent w-3.5 h-3.5" />)}
-                  </div>
-                  <p className="text-w-text text-base leading-relaxed italic mb-8">"{t.quote}"</p>
-                </div>
-                <div className="flex items-center gap-3 pt-6 border-t border-w-border/50">
-                  <img src={t.img} alt={t.name} className="w-10 h-10 rounded-full object-cover" />
+        {reviews.length === 0 ? (
+          <FadeSection className="text-center py-10">
+            <p className="text-w-muted text-lg mb-6">Be the first to share your story.</p>
+          </FadeSection>
+        ) : (
+          <div className="marquee-mask">
+            <div className="marquee-track">
+              {[...reviews, ...reviews].map((r, i) => (
+                <div key={`${r._id}-${i}`} className="card w-80 flex-shrink-0 flex flex-col justify-between border border-w-border">
                   <div>
-                    <div className="text-white font-medium text-sm">{t.name}</div>
-                    <div className="text-w-muted text-xs">{t.role}</div>
+                    <div className="flex gap-0.5 mb-6">
+                      {[...Array(5)].map((_, j) => <FaStar key={j} className={`w-3.5 h-3.5 ${j < r.rating ? 'text-w-accent' : 'text-w-border'}`} />)}
+                    </div>
+                    <p className="text-w-text text-base leading-relaxed italic mb-8">"{r.reviewText}"</p>
+                  </div>
+                  <div className="pt-6 border-t border-w-border/50">
+                    <div className="text-white font-medium text-sm">{r.fullName}</div>
                   </div>
                 </div>
-              </div>
-            </FadeSection>
-          ))}
-        </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <FadeSection className="text-center mt-14">
+          <button onClick={handleWriteReview} className="btn-outline text-sm">Write a Review</button>
+        </FadeSection>
       </div>
+
+      <ReviewFormModal open={showForm} onClose={() => setShowForm(false)} />
+      <SignInPromptModal open={showSignIn} onClose={() => setShowSignIn(false)} />
     </section>
   )
 }
