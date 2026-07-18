@@ -9,6 +9,7 @@
     "seed": "node utils/seedData.js"
   },
   "dependencies": {
+    "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
