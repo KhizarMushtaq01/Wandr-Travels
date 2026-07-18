@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { FaStar } from 'react-icons/fa6';
 import { format } from 'date-fns';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 const statusBadge = { pending: 'badge-gold', approved: 'badge-green', rejected: 'badge-red' };
 
@@ -13,6 +14,7 @@ export default function AdminReviewsPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const fetchReviews = () => {
     setLoading(true);
@@ -33,8 +35,9 @@ export default function AdminReviewsPage() {
     } catch (e) {}
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this review?')) return;
+  const confirmDelete = async () => {
+    const id = confirmDeleteId;
+    setConfirmDeleteId(null);
     try {
       await api.delete('/admin/reviews/' + id);
       setReviews(r => r.filter(x => x._id !== id));
@@ -76,7 +79,7 @@ export default function AdminReviewsPage() {
             <div className="flex gap-2 mt-4 pt-4 border-t border-wandr-border">
               {rev.status !== 'approved' && <button onClick={() => updateStatus(rev._id, 'approved')} className="btn-secondary text-xs px-3 py-1.5">Approve</button>}
               {rev.status !== 'rejected' && <button onClick={() => updateStatus(rev._id, 'rejected')} className="btn-secondary text-xs px-3 py-1.5">Reject</button>}
-              <button onClick={() => handleDelete(rev._id)} className="p-1.5 rounded-lg text-wandr-muted hover:text-red-400 hover:bg-red-500/10 transition-colors ml-auto"><TrashIcon className="w-4 h-4" /></button>
+              <button onClick={() => setConfirmDeleteId(rev._id)} className="p-1.5 rounded-lg text-wandr-muted hover:text-red-400 hover:bg-red-500/10 transition-colors ml-auto"><TrashIcon className="w-4 h-4" /></button>
             </div>
           </div>
         ))}
@@ -90,6 +93,15 @@ export default function AdminReviewsPage() {
           <button disabled={reviews.length < 20} onClick={() => setPage(p => p + 1)} className="btn-secondary text-sm px-3 py-1.5 disabled:opacity-40">Next →</button>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={!!confirmDeleteId}
+        title="Delete Review"
+        message="This will permanently delete this review. This action cannot be undone."
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmDeleteId(null)}
+      />
     </div>
   );
 }

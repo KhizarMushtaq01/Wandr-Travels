@@ -7,6 +7,7 @@ import useAuthStore from '../context/authStore'
 import api from '../utils/api'
 import ReviewFormModal from '../components/reviews/ReviewFormModal'
 import SignInPromptModal from '../components/reviews/SignInPromptModal'
+import ViewAllReviewsModal from '../components/reviews/ViewAllReviewsModal'
 
 const HERO_IMAGES = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
@@ -320,6 +321,7 @@ function TestimonialsSection() {
   const [reviews, setReviews] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [showSignIn, setShowSignIn] = useState(false)
+  const [showAll, setShowAll] = useState(false)
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
 
   useEffect(() => {
@@ -363,13 +365,17 @@ function TestimonialsSection() {
           </div>
         )}
 
-        <FadeSection className="text-center mt-14">
+        <FadeSection className="text-center mt-14 flex flex-wrap items-center justify-center gap-3">
           <button onClick={handleWriteReview} className="btn-outline text-sm">Write a Review</button>
+          {reviews.length > 0 && (
+            <button onClick={() => setShowAll(true)} className="btn-ghost text-sm">View All Reviews</button>
+          )}
         </FadeSection>
       </div>
 
       <ReviewFormModal open={showForm} onClose={() => setShowForm(false)} />
       <SignInPromptModal open={showSignIn} onClose={() => setShowSignIn(false)} />
+      <ViewAllReviewsModal open={showAll} onClose={() => setShowAll(false)} reviews={reviews} />
     </section>
   )
 }
