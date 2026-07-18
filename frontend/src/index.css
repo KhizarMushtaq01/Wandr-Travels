@@ -32,6 +32,11 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 ::selection { background: rgba(232,194,122,0.25); }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 @layer components {
   /* ── Buttons ─────────────────────────────────── */
   .btn { @apply inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 rounded-xl cursor-pointer select-none; }
@@ -66,6 +71,11 @@ body {
   .badge-green { @apply badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/25; }
   .badge-red { @apply badge bg-red-500/15 text-red-400 border border-red-500/25; }
   .badge-purple { @apply badge bg-purple-500/15 text-purple-400 border border-purple-500/25; }
+
+  /* ── Reviews Marquee ─────────────────────────── */
+  .marquee-track { @apply flex gap-6 w-max; animation: marquee 40s linear infinite; }
+  .marquee-track:hover { animation-play-state: paused; }
+  .marquee-mask { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); overflow: hidden; }
 
   /* ── Misc ─────────────────────────────────── */
   .divider { @apply border-t border-w-border/60; }

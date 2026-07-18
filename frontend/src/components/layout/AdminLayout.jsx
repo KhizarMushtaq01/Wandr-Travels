@@ -12,6 +12,7 @@ const ADMIN_NAV = [
   { to:'/admin/reports',   icon:ADMIN_NAV_ICONS.reports,   label:'Reports'  },
   { to:'/admin/journal',   icon:ADMIN_NAV_ICONS.journal,   label:'Journal'  },
   { to:'/admin/contact',   icon:ADMIN_NAV_ICONS.contact,   label:'Contact'  },
+  { to:'/admin/reviews',   icon:ADMIN_NAV_ICONS.reviews,   label:'Reviews'  },
   { to:'/admin/activity',  icon:ADMIN_NAV_ICONS.activity,  label:'Activity'  },
   { to:'/admin/settings',  icon:ADMIN_NAV_ICONS.settings,  label:'Settings'  },
 ]

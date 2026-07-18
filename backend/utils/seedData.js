@@ -10,8 +10,9 @@ const User = require('../models/User');
 const Trip = require('../models/Trip');
 const Booking = require('../models/Booking');
 const { Expense, PackingList, Journal, Notification } = require('../models/Extras');
+const Review = require('../models/Review');
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/wandr';
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/wandr';
 
 async function seed() {
   await mongoose.connect(MONGO_URI);
@@ -26,6 +27,7 @@ async function seed() {
     PackingList.deleteMany({}),
     Journal.deleteMany({}),
     Notification.deleteMany({}),
+    Review.deleteMany({}),
   ]);
   console.log('🧹 Cleared existing data');
 
@@ -337,6 +339,21 @@ async function seed() {
   await Notification.create({ user: user2._id, type: 'trip_reminder', title: 'Trip Reminder', message: 'Your Iceland Ring Road trip starts in 3 days!', isRead: true });
 
   console.log('🔔 Created notifications');
+
+  // Create dummy approved reviews (site testimonials)
+  const dummyReviews = [
+    { fullName: 'Elena K.', email: 'elena.k@example.com', rating: 5, reviewText: 'Wandr is the only travel app I actually keep using. It turned planning from a chore into a joy.' },
+    { fullName: 'Marcus Chen', email: 'marcus.chen@example.com', rating: 5, reviewText: 'We planned our entire Patagonia trek — 18 days — without a single spreadsheet. Pure magic.' },
+    { fullName: 'Yuki Tanaka', email: 'yuki.tanaka@example.com', rating: 5, reviewText: 'The journal feature alone is worth it. I have detailed memories of every trip since 2023.' },
+    { fullName: 'Priya Nair', email: 'priya.nair@example.com', rating: 4, reviewText: 'Booking manager saved my sanity on a 6-country trip. Wish the mobile app had offline maps too, but otherwise fantastic.' },
+    { fullName: "James O'Connor", email: 'james.oconnor@example.com', rating: 5, reviewText: 'Switched from three different apps to just Wandr. The budget tracker with currency split made our group trip painless.' },
+    { fullName: 'Sofia Rossi', email: 'sofia.rossi@example.com', rating: 5, reviewText: 'Discover feed introduced me to a route through the Dolomites I never would have found on my own. Already planning the next one.' },
+  ];
+  for (const r of dummyReviews) {
+    await Review.create({ ...r, user: new mongoose.Types.ObjectId(), status: 'approved' });
+  }
+  console.log(`⭐ Created ${dummyReviews.length} dummy approved reviews`);
+
   console.log('\n✅ Seed complete!\n');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('Demo Accounts:');
