@@ -469,7 +469,7 @@ function Footer() {
             </div>
           </div>
           {[
-            { title:'Product', links:[['Features','#features'],['Pricing','#pricing'],['Changelog','/blog'],['Roadmap','/blog']] },
+            { title:'Product', links:[['Features','#features'],['Pricing','#pricing'],['Changelog','/changelog'],['Roadmap','/roadmap']] },
             { title:'Company', links:[['About','/about'],['Careers','/careers'],['Press','/press'],['Contact','/contact']] },
             { title:'Resources', links:[['Help Center','/help'],['Blog','/blog'],['Explore','/explore'],['Community','/social']] },
             { title:'Legal', links:[['Privacy','/privacy'],['Terms','/terms'],['Cookies','/cookies'],['Acceptable Use','/acceptable-use']] },

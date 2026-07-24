@@ -34,7 +34,7 @@ function PublicFooter() {
             { title:'Company', links:[['About','/about'],['Careers','/careers'],['Press','/press'],['Contact','/contact']] },
             { title:'Resources', links:[['Help Center','/help'],['Blog','/blog'],['Explore','/explore']] },
             { title:'Legal', links:[['Privacy','/privacy'],['Terms','/terms'],['Cookies','/cookies'],['Refund','/refund'],['Acceptable Use','/acceptable-use'],['Accessibility','/accessibility']] },
-            { title:'Product', links:[['Features','/#features'],['Pricing','/#pricing'],['Changelog','/blog'],['Roadmap','/blog']] },
+            { title:'Product', links:[['Features','/#features'],['Pricing','/#pricing'],['Changelog','/changelog'],['Roadmap','/roadmap']] },
           ].map(({ title, links }) => (
             <div key={title}>
               <h4 className="text-white text-xs font-semibold uppercase tracking-widest mb-4">{title}</h4>
