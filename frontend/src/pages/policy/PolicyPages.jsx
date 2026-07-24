@@ -729,3 +729,109 @@ export function BlogPostPage() {
     </PublicLayout>
   )
 }
+
+/* ─── Changelog ──────────────────────────────────────────────────────── */
+const CHANGELOG_TAG_BADGE = { Added: 'badge-green', Fixed: 'badge-blue', Changed: 'badge-gold' }
+const CHANGELOG_ENTRIES = [
+  {
+    version: 'v0.3.0',
+    date: 'Placeholder — March 2026',
+    tag: 'Added',
+    changes: [
+      'Placeholder changelog entry — replace with a real release note.',
+      'Add another bullet describing what shipped in this release.',
+    ],
+  },
+  {
+    version: 'v0.2.0',
+    date: 'Placeholder — February 2026',
+    tag: 'Fixed',
+    changes: [
+      'Placeholder changelog entry — replace with a real release note.',
+    ],
+  },
+  {
+    version: 'v0.1.0',
+    date: 'Placeholder — January 2026',
+    tag: 'Changed',
+    changes: [
+      'Placeholder changelog entry — replace with a real release note.',
+    ],
+  },
+]
+
+export function ChangelogPage() {
+  return (
+    <PublicLayout title="Changelog" subtitle="What's new in Wandr." breadcrumb="Changelog">
+      <InfoBox icon={<FaCircleInfo />} color="blue">These are sample placeholder entries — replace them with real release notes as Wandr ships updates.</InfoBox>
+      <div className="mt-10 space-y-6">
+        {CHANGELOG_ENTRIES.map((entry, i) => (
+          <motion.div key={entry.version} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className="card p-5 sm:p-6">
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <h3 className="font-display text-xl text-white font-light">{entry.version}</h3>
+              <span className={CHANGELOG_TAG_BADGE[entry.tag]}>{entry.tag}</span>
+              <span className="text-w-muted text-sm">{entry.date}</span>
+            </div>
+            <Ul>
+              {entry.changes.map((c) => <Li key={c}>{c}</Li>)}
+            </Ul>
+          </motion.div>
+        ))}
+      </div>
+    </PublicLayout>
+  )
+}
+
+/* ─── Roadmap ────────────────────────────────────────────────────────── */
+const ROADMAP_STATUS_BADGE = { Shipped: 'badge-green', 'In Progress': 'badge-gold', Planned: 'badge-blue' }
+const ROADMAP_GROUPS = [
+  {
+    status: 'Shipped',
+    items: [
+      { title: 'Cloudinary Image Hosting', desc: 'Avatars and uploaded images now store on Cloudinary instead of local disk.' },
+      { title: 'Resend Email Delivery', desc: 'Transactional emails (password resets, confirmations) now send through Resend.' },
+      { title: 'Responsive Dashboard & Search', desc: 'Dashboard, search, and wishlist layouts reworked to work well on phones and tablets.' },
+      { title: 'Session Stability Fix', desc: 'Fixed a bug where hitting a rate limit could force-log out users with a valid session.' },
+      { title: 'Notification & Admin UI Fixes', desc: 'Fixed the notification bell dropdown rendering behind content, and the admin sidebar losing its scroll.' },
+    ],
+  },
+  {
+    status: 'In Progress',
+    items: [
+      { title: 'Group Trip Collaboration', desc: 'Real-time co-editing of itineraries with travel companions.' },
+      { title: 'Calendar Sync', desc: 'Two-way sync between Wandr itineraries and Google/Apple Calendar.' },
+    ],
+  },
+  {
+    status: 'Planned',
+    items: [
+      { title: 'Offline Itinerary Access', desc: 'View trip itineraries and bookings without an internet connection.' },
+      { title: 'Multi-Currency Budget Tracking', desc: 'Track and convert trip expenses across multiple currencies automatically.' },
+    ],
+  },
+]
+
+export function RoadmapPage() {
+  return (
+    <PublicLayout title="Roadmap" subtitle="Where Wandr is headed." breadcrumb="Roadmap">
+      <InfoBox icon={<FaCircleInfo />} color="gold">This roadmap is a starting draft based on the app's current state — replace or reorder items as real priorities are set.</InfoBox>
+      <div className="mt-10 space-y-12">
+        {ROADMAP_GROUPS.map((group) => (
+          <Section key={group.status} title={group.status}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {group.items.map((item, i) => (
+                <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className="card p-5">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h4 className="text-white font-semibold text-sm">{item.title}</h4>
+                    <span className={`${ROADMAP_STATUS_BADGE[group.status]} flex-shrink-0`}>{group.status}</span>
+                  </div>
+                  <p className="text-w-muted text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </Section>
+        ))}
+      </div>
+    </PublicLayout>
+  )
+}
