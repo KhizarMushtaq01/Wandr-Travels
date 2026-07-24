@@ -25,6 +25,7 @@ import HelpCenterPage        from './pages/policy/HelpCenterPage'
 import BlogPage              from './pages/policy/BlogPage'
 import BlogPostPage          from './pages/policy/BlogPostPage'
 import ChangelogPage          from './pages/policy/ChangelogPage'
+import RoadmapPage            from './pages/policy/RoadmapPage'
 import DashboardPage    from './pages/dashboard/DashboardPage'
 import TripsPage        from './pages/trips/TripsPage'
 import TripDetailPage   from './pages/trips/TripDetailPage'
@@ -87,6 +88,7 @@ export default function App() {
         <Route path="/acceptable-use" element={<AcceptableUsePage />} />
         <Route path="/accessibility" element={<AccessibilityPage />} />
         <Route path="/changelog" element={<ChangelogPage />} />
+        <Route path="/roadmap" element={<RoadmapPage />} />
         <Route element={<PrivateRoute><MainLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/trips" element={<TripsPage />} />
