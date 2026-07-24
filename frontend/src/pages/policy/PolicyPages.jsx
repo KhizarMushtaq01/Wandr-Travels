@@ -729,3 +729,55 @@ export function BlogPostPage() {
     </PublicLayout>
   )
 }
+
+/* ─── Changelog ──────────────────────────────────────────────────────── */
+const CHANGELOG_TAG_BADGE = { Added: 'badge-green', Fixed: 'badge-blue', Changed: 'badge-gold' }
+const CHANGELOG_ENTRIES = [
+  {
+    version: 'v0.3.0',
+    date: 'Placeholder — March 2026',
+    tag: 'Added',
+    changes: [
+      'Placeholder changelog entry — replace with a real release note.',
+      'Add another bullet describing what shipped in this release.',
+    ],
+  },
+  {
+    version: 'v0.2.0',
+    date: 'Placeholder — February 2026',
+    tag: 'Fixed',
+    changes: [
+      'Placeholder changelog entry — replace with a real release note.',
+    ],
+  },
+  {
+    version: 'v0.1.0',
+    date: 'Placeholder — January 2026',
+    tag: 'Changed',
+    changes: [
+      'Placeholder changelog entry — replace with a real release note.',
+    ],
+  },
+]
+
+export function ChangelogPage() {
+  return (
+    <PublicLayout title="Changelog" subtitle="What's new in Wandr." breadcrumb="Changelog">
+      <InfoBox icon={<FaCircleInfo />} color="blue">These are sample placeholder entries — replace them with real release notes as Wandr ships updates.</InfoBox>
+      <div className="mt-10 space-y-6">
+        {CHANGELOG_ENTRIES.map((entry, i) => (
+          <motion.div key={entry.version} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className="card p-5 sm:p-6">
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <h3 className="font-display text-xl text-white font-light">{entry.version}</h3>
+              <span className={CHANGELOG_TAG_BADGE[entry.tag]}>{entry.tag}</span>
+              <span className="text-w-muted text-sm">{entry.date}</span>
+            </div>
+            <Ul>
+              {entry.changes.map((c) => <Li key={c}>{c}</Li>)}
+            </Ul>
+          </motion.div>
+        ))}
+      </div>
+    </PublicLayout>
+  )
+}
