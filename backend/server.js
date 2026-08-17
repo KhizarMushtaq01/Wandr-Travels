@@ -11,6 +11,10 @@ connectDB();
 
 const app = express();
 
+// Running behind Render's load balancer — trust its X-Forwarded-For so rate
+// limiting keys on the real client IP instead of the proxy's.
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 
