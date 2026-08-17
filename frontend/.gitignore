@@ -1027,3 +1027,10 @@ vercel.json
 out/
 **/.next
 **/out
+# ============================================
+# Committed build-time config (exception)
+# ============================================
+# .env.production holds only VITE_* values, which Vite inlines into the public
+# client bundle — never secrets. It must be committed so Vercel's `vite build`
+# picks up VITE_API_URL. Overridden by a Vercel dashboard variable if one is set.
+!.env.production
