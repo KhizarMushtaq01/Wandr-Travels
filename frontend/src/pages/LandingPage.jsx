@@ -24,8 +24,18 @@ const TRAVEL_REEL_SCENES = [
   { location: 'Kyoto', country: 'Japan', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=85' },
   { location: 'Iceland', country: 'Land of Fire and Ice', image: 'https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=1600&q=85' },
   { location: 'Swiss Alps', country: 'Switzerland', image: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1600&q=85' },
+  { location: 'Bali', country: 'Indonesia', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=85' },
+  { location: 'Cappadocia', country: 'Turkey', image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?w=1600&q=85' },
+  { location: 'Amalfi Coast', country: 'Italy', image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1600&q=85' },
+  { location: 'Norway', country: 'Scandinavia', image: 'https://images.unsplash.com/photo-1520769945061-0a448c463865?w=1600&q=85' },
+  { location: 'Rio de Janeiro', country: 'Brazil', image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=1600&q=85' },
+  { location: 'Marrakech', country: 'Morocco', image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=1600&q=85' },
+  { location: 'Cape Town', country: 'South Africa', image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1600&q=85' },
+  { location: 'New York', country: 'United States', image: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=1600&q=85' },
+  { location: 'Singapore', country: 'Singapore', image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=1600&q=85' },
+  { location: 'Patagonia', country: 'Argentina', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=85' },
 ]
-const TRAVEL_REEL_SCENE_DURATION = 8
+const TRAVEL_REEL_SCENE_DURATION = 2500
 const TRAVEL_REEL_DURATION = TRAVEL_REEL_SCENES.length * TRAVEL_REEL_SCENE_DURATION
 
 const DESTINATIONS = [
@@ -155,7 +165,7 @@ function HeroSection() {
   const [videoOpen, setVideoOpen] = useState(false)
   const [reelPlaying, setReelPlaying] = useState(false)
   const [reelMuted, setReelMuted] = useState(false)
-  const [reelSeconds, setReelSeconds] = useState(0)
+  const [reelMilliseconds, setReelMilliseconds] = useState(0)
   const audioContextRef = useRef(null)
   const audioGainRef = useRef(null)
   const { scrollYProgress } = useScroll()
@@ -183,14 +193,14 @@ function HeroSection() {
   useEffect(() => {
     if (!videoOpen || !reelPlaying) return undefined
     const timer = setInterval(() => {
-      setReelSeconds(seconds => {
-        if (seconds >= TRAVEL_REEL_DURATION - 1) {
+      setReelMilliseconds(milliseconds => {
+        if (milliseconds >= TRAVEL_REEL_DURATION - 100) {
           setReelPlaying(false)
           return TRAVEL_REEL_DURATION
         }
-        return seconds + 1
+        return milliseconds + 100
       })
-    }, 1000)
+    }, 100)
     return () => clearInterval(timer)
   }, [videoOpen, reelPlaying])
 
@@ -235,7 +245,7 @@ function HeroSection() {
 
   const openVideo = () => {
     startAmbientAudio()
-    setReelSeconds(0)
+    setReelMilliseconds(0)
     setReelPlaying(true)
     setVideoOpen(true)
   }
@@ -243,13 +253,24 @@ function HeroSection() {
   const closeVideo = () => {
     setVideoOpen(false)
     setReelPlaying(false)
-    setReelSeconds(0)
+    setReelMilliseconds(0)
     audioContextRef.current?.close()
     audioContextRef.current = null
     audioGainRef.current = null
   }
 
-  const toggleReelPlayback = () => setReelPlaying(playing => !playing)
+  const toggleReelPlayback = () => {
+    if (reelMilliseconds >= TRAVEL_REEL_DURATION) {
+      audioContextRef.current?.close()
+      audioContextRef.current = null
+      audioGainRef.current = null
+      startAmbientAudio()
+      setReelMilliseconds(0)
+      setReelPlaying(true)
+      return
+    }
+    setReelPlaying(playing => !playing)
+  }
   const toggleReelMute = () => setReelMuted(muted => !muted)
 
   return (
@@ -328,9 +349,9 @@ function HeroSection() {
               <div className="relative aspect-video overflow-hidden bg-black">
                 <AnimatePresence mode="wait">
                   <motion.img
-                    key={TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location}
-                    src={TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].image}
-                    alt={`${TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location} travel scene`}
+                    key={TRAVEL_REEL_SCENES[Math.min(Math.floor(reelMilliseconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location}
+                    src={TRAVEL_REEL_SCENES[Math.min(Math.floor(reelMilliseconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].image}
+                    alt={`${TRAVEL_REEL_SCENES[Math.min(Math.floor(reelMilliseconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location} travel scene`}
                     className="h-full w-full object-cover"
                     initial={{ opacity: 0, scale: 1.06 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.02 }} transition={{ duration: 0.8 }}
                   />
@@ -341,8 +362,8 @@ function HeroSection() {
                 </button>
                 <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-10 sm:px-6 sm:pb-5">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-w-accent">{TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].country}</p>
-                    <p className="mt-1 font-display text-lg text-white sm:text-xl">{TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location}</p>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-w-accent">{TRAVEL_REEL_SCENES[Math.min(Math.floor(reelMilliseconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].country}</p>
+                    <p className="mt-1 font-display text-lg text-white sm:text-xl">{TRAVEL_REEL_SCENES[Math.min(Math.floor(reelMilliseconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <button type="button" onClick={toggleReelPlayback} aria-label={reelPlaying ? 'Pause travel reel' : 'Play travel reel'} className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white transition-colors hover:bg-w-accent hover:text-w-dark">
@@ -354,7 +375,7 @@ function HeroSection() {
                   </div>
                 </div>
                 <div className="absolute inset-x-4 bottom-0 h-1 overflow-hidden rounded-full bg-white/20 sm:inset-x-6">
-                  <motion.div className="h-full bg-w-accent" animate={{ width: `${(reelSeconds / TRAVEL_REEL_DURATION) * 100}%` }} />
+                  <motion.div className="h-full bg-w-accent" animate={{ width: `${(reelMilliseconds / TRAVEL_REEL_DURATION) * 100}%` }} />
                 </div>
               </div>
             </motion.div>
