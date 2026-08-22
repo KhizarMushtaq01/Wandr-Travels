@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { SOCIAL_ICONS } from '../utils/icons'
-import { FaMap, FaCalendarCheck, FaSackDollar, FaBoxesPacking, FaBookOpen, FaUsers, FaBell, FaGlobe, FaStar, FaPlay, FaCheck, FaHeart } from 'react-icons/fa6'
+import { FaMap, FaCalendarCheck, FaSackDollar, FaBoxesPacking, FaBookOpen, FaUsers, FaBell, FaGlobe, FaStar, FaPlay, FaPause, FaVolumeHigh, FaVolumeXmark, FaXmark, FaCheck, FaHeart } from 'react-icons/fa6'
 import useAuthStore from '../context/authStore'
 import api from '../utils/api'
 import ReviewFormModal from '../components/reviews/ReviewFormModal'
@@ -15,6 +15,18 @@ const HERO_IMAGES = [
   'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&q=80',
   'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=80',
 ]
+
+const TRAVEL_REEL_SCENES = [
+  { location: 'Santorini', country: 'Greece', image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1600&q=85' },
+  { location: 'Maldives', country: 'Indian Ocean', image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1600&q=85' },
+  { location: 'Dubai', country: 'United Arab Emirates', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=85' },
+  { location: 'Paris', country: 'France', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1600&q=85' },
+  { location: 'Kyoto', country: 'Japan', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=85' },
+  { location: 'Iceland', country: 'Land of Fire and Ice', image: 'https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=1600&q=85' },
+  { location: 'Swiss Alps', country: 'Switzerland', image: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1600&q=85' },
+]
+const TRAVEL_REEL_SCENE_DURATION = 8
+const TRAVEL_REEL_DURATION = TRAVEL_REEL_SCENES.length * TRAVEL_REEL_SCENE_DURATION
 
 const DESTINATIONS = [
   { name:'Santorini', country:'Greece', img:'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&q=80', tag:'Romance', description:'White-washed buildings, blue domes, and breathtaking sunsets over the Aegean Sea. Santorini is the crown jewel of the Cyclades.' },
@@ -140,6 +152,12 @@ function Navbar() {
 
 function HeroSection() {
   const [imgIdx, setImgIdx] = useState(0)
+  const [videoOpen, setVideoOpen] = useState(false)
+  const [reelPlaying, setReelPlaying] = useState(false)
+  const [reelMuted, setReelMuted] = useState(false)
+  const [reelSeconds, setReelSeconds] = useState(0)
+  const audioContextRef = useRef(null)
+  const audioGainRef = useRef(null)
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 0.3], ['0%', '20%'])
   const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
@@ -148,6 +166,91 @@ function HeroSection() {
     const t = setInterval(() => setImgIdx(i => (i + 1) % HERO_IMAGES.length), 5000)
     return () => clearInterval(t)
   }, [])
+
+  useEffect(() => {
+    if (!videoOpen) return undefined
+    const handleKeyDown = event => {
+      if (event.key === 'Escape') closeVideo()
+    }
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = ''
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [videoOpen])
+
+  useEffect(() => {
+    if (!videoOpen || !reelPlaying) return undefined
+    const timer = setInterval(() => {
+      setReelSeconds(seconds => {
+        if (seconds >= TRAVEL_REEL_DURATION - 1) {
+          setReelPlaying(false)
+          return TRAVEL_REEL_DURATION
+        }
+        return seconds + 1
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [videoOpen, reelPlaying])
+
+  useEffect(() => {
+    if (!audioContextRef.current) return
+    if (reelPlaying) audioContextRef.current.resume()
+    else audioContextRef.current.suspend()
+  }, [reelPlaying])
+
+  useEffect(() => {
+    if (audioGainRef.current) audioGainRef.current.gain.value = reelMuted ? 0 : 0.045
+  }, [reelMuted])
+
+  const startAmbientAudio = () => {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext
+    if (!AudioContextClass || audioContextRef.current) return
+    const audioContext = new AudioContextClass()
+    const masterGain = audioContext.createGain()
+    masterGain.gain.setValueAtTime(0, audioContext.currentTime)
+    masterGain.gain.linearRampToValueAtTime(0.045, audioContext.currentTime + 1.8)
+    masterGain.connect(audioContext.destination)
+    const melody = [261.63, 329.63, 392, 329.63, 293.66, 349.23, 440, 349.23, 261.63, 329.63, 392, 523.25, 440, 392, 349.23, 293.66, 261.63, 329.63, 392, 329.63, 293.66, 349.23, 440, 523.25, 440, 392, 329.63, 261.63]
+    const startTime = audioContext.currentTime + 0.15
+    melody.forEach((frequency, index) => {
+      const oscillator = audioContext.createOscillator()
+      const gain = audioContext.createGain()
+      const noteStart = startTime + index * 2
+      oscillator.type = 'sine'
+      oscillator.frequency.value = frequency
+      oscillator.detune.value = index % 2 === 0 ? -3 : 3
+      gain.gain.setValueAtTime(0, noteStart)
+      gain.gain.linearRampToValueAtTime(index % 4 === 0 ? 0.14 : 0.09, noteStart + 0.12)
+      gain.gain.exponentialRampToValueAtTime(0.001, noteStart + 1.7)
+      oscillator.connect(gain)
+      gain.connect(masterGain)
+      oscillator.start(noteStart)
+      oscillator.stop(noteStart + 1.8)
+    })
+    audioContextRef.current = audioContext
+    audioGainRef.current = masterGain
+  }
+
+  const openVideo = () => {
+    startAmbientAudio()
+    setReelSeconds(0)
+    setReelPlaying(true)
+    setVideoOpen(true)
+  }
+
+  const closeVideo = () => {
+    setVideoOpen(false)
+    setReelPlaying(false)
+    setReelSeconds(0)
+    audioContextRef.current?.close()
+    audioContextRef.current = null
+    audioGainRef.current = null
+  }
+
+  const toggleReelPlayback = () => setReelPlaying(playing => !playing)
+  const toggleReelMute = () => setReelMuted(muted => !muted)
 
   return (
     <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
@@ -192,12 +295,12 @@ function HeroSection() {
           <Link to="/register" className="btn-primary text-base px-9 py-4 shadow-[0_0_40px_rgba(232,194,122,0.3)]">
             Begin Your Adventure →
           </Link>
-          <Link to="/explore" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm px-6 py-4 border border-white/20 rounded-xl hover:border-white/40 hover:bg-white/5 backdrop-blur-sm">
+          <button type="button" onClick={openVideo} className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm px-6 py-4 border border-white/20 rounded-xl hover:border-white/40 hover:bg-white/5 backdrop-blur-sm">
             <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">
               <FaPlay className="w-3 h-3" />
             </span>
             Explore Community Trips
-          </Link>
+          </button>
         </motion.div>
       </motion.div>
 
@@ -207,6 +310,57 @@ function HeroSection() {
         <span className="text-white/30 text-xs tracking-widest uppercase">Scroll</span>
         <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent" />
       </motion.div>
+
+      <AnimatePresence>
+        {videoOpen && (
+          <motion.div
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-6"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onMouseDown={event => { if (event.target === event.currentTarget) closeVideo() }}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Wandr 32 second travel reel"
+              className="relative w-full max-w-5xl overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-w-navy shadow-2xl"
+              initial={{ opacity: 0, scale: 0.96, y: 18 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: 18 }}
+            >
+              <div className="relative aspect-video overflow-hidden bg-black">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location}
+                    src={TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].image}
+                    alt={`${TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location} travel scene`}
+                    className="h-full w-full object-cover"
+                    initial={{ opacity: 0, scale: 1.06 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.02 }} transition={{ duration: 0.8 }}
+                  />
+                </AnimatePresence>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+                <button type="button" onClick={closeVideo} aria-label="Close video" className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm transition-colors hover:bg-w-accent hover:text-w-dark">
+                  <FaXmark />
+                </button>
+                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-10 sm:px-6 sm:pb-5">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-w-accent">{TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].country}</p>
+                    <p className="mt-1 font-display text-lg text-white sm:text-xl">{TRAVEL_REEL_SCENES[Math.min(Math.floor(reelSeconds / TRAVEL_REEL_SCENE_DURATION), TRAVEL_REEL_SCENES.length - 1)].location}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button type="button" onClick={toggleReelPlayback} aria-label={reelPlaying ? 'Pause travel reel' : 'Play travel reel'} className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white transition-colors hover:bg-w-accent hover:text-w-dark">
+                      {reelPlaying ? <FaPause className="text-xs" /> : <FaPlay className="text-xs" />}
+                    </button>
+                    <button type="button" onClick={toggleReelMute} aria-label={reelMuted ? 'Unmute travel reel' : 'Mute travel reel'} className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white transition-colors hover:bg-w-accent hover:text-w-dark">
+                      {reelMuted ? <FaVolumeXmark className="text-sm" /> : <FaVolumeHigh className="text-sm" />}
+                    </button>
+                  </div>
+                </div>
+                <div className="absolute inset-x-4 bottom-0 h-1 overflow-hidden rounded-full bg-white/20 sm:inset-x-6">
+                  <motion.div className="h-full bg-w-accent" animate={{ width: `${(reelSeconds / TRAVEL_REEL_DURATION) * 100}%` }} />
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
