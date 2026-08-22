@@ -26,7 +26,7 @@ function PublicNav() {
             aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(open => !open)}
-            className="lg:hidden p-2 text-w-dark bg-gradient-to-br from-w-accent to-w-gold hover:brightness-110 rounded-xl transition-all shadow-[0_0_16px_rgba(232,194,122,0.25)]"
+            className="xl:hidden p-2 text-w-dark bg-gradient-to-br from-w-accent to-w-gold hover:brightness-110 rounded-xl transition-all shadow-[0_0_16px_rgba(232,194,122,0.25)]"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {menuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18 18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
@@ -35,7 +35,7 @@ function PublicNav() {
         </div>
       </div>
       {menuOpen && (
-        <div className="lg:hidden border-t border-w-border/50 bg-w-dark/95 backdrop-blur-xl px-4 py-4">
+        <div className="xl:hidden border-t border-w-border/50 bg-w-dark/95 backdrop-blur-xl px-4 py-4">
           <div className="flex flex-col gap-1">
             {navItems.map(([label, href]) => (
               <Link key={label} to={href} onClick={() => setMenuOpen(false)} className="px-4 py-3 text-w-muted hover:text-white hover:bg-white/5 rounded-xl transition-colors">{label}</Link>
